@@ -1,11 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Journal</title>
-  <link rel="stylesheet" href="../style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Daily Journal</title>
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fafafa;
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #ddd;
+    }
+
+    header a {
+      text-decoration: none;
+      color: #007bff;
+      font-size: 0.9rem;
+    }
+
+    header a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    section {
+      margin-bottom: 25px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      color: #222;
+      font-size: 1.3rem;
+    }
+
+    textarea, input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      resize: none;
+    }
+
+    textarea {
+      height: 150px;
+    }
+
+    #save-entry {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.2rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #save-entry:hover {
+      background: #005fcc;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 10px;
+      color: #555;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .mood-options {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-start;
+    }
+
+    .mood-options label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 700px) {
+      main {
+        padding: 15px;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <header>
     <h1 id="entry-date">Loading...</h1>
@@ -13,8 +121,36 @@
   </header>
 
   <main>
-    <textarea id="entry-text" placeholder="Write your reflections for this day..."></textarea>
-    <button id="save-entry">Save Entry</button>
+    <section id="mood">
+      <h2>🌤️ Mood Tracker</h2>
+      <div class="mood-options">
+        <label><input type="radio" name="mood" value="😊" /> Happy</label>
+        <label><input type="radio" name="mood" value="😐" /> Neutral</label>
+        <label><input type="radio" name="mood" value="😔" /> Sad</label>
+        <label><input type="radio" name="mood" value="😤" /> Stressed</label>
+        <label><input type="radio" name="mood" value="😎" /> Confident</label>
+      </div>
+    </section>
+
+    <section id="reflection">
+      <h2>📝 Daily Reflection</h2>
+      <textarea id="reflection-text" placeholder="Write your thoughts, experiences, and lessons for the day..."></textarea>
+      <div class="stats"><span id="word-count">0 words</span></div>
+    </section>
+
+    <section id="gratitude">
+      <h2>🙏 Gratitude List</h2>
+      <textarea id="gratitude-text" placeholder="List things you’re grateful for today..."></textarea>
+    </section>
+
+    <section id="goals">
+      <h2>🎯 Tomorrow’s Goals</h2>
+      <textarea id="goals-text" placeholder="Write what you want to achieve tomorrow..."></textarea>
+    </section>
+
+    <section id="actions">
+      <button id="save-entry">💾 Save Entry</button>
+    </section>
   </main>
 
   <footer>
@@ -22,24 +158,51 @@
   </footer>
 
   <script>
-    // Read the date from the URL
+    // --- Get date from URL ---
     const params = new URLSearchParams(window.location.search);
     const date = params.get("date");
     const title = document.getElementById("entry-date");
-    const textarea = document.getElementById("entry-text");
-
-    // Show the date on top
     title.textContent = date ? `Journal for ${date}` : "No date selected";
 
-    // Load any saved entry from localStorage
-    const key = `entry-${date}`;
-    textarea.value = localStorage.getItem(key) || "";
+    // --- Form Elements ---
+    const reflection = document.getElementById("reflection-text");
+    const gratitude = document.getElementById("gratitude-text");
+    const goals = document.getElementById("goals-text");
+    const wordCount = document.getElementById("word-count");
 
-    // Save entry when button is clicked
+    // --- Local Storage Key ---
+    const key = `entry-${date}`;
+
+    // --- Load saved data ---
+    const saved = JSON.parse(localStorage.getItem(key)) || {};
+    if (saved.reflection) reflection.value = saved.reflection;
+    if (saved.gratitude) gratitude.value = saved.gratitude;
+    if (saved.goals) goals.value = saved.goals;
+    if (saved.mood) {
+      const moodOption = document.querySelector(`input[name="mood"][value="${saved.mood}"]`);
+      if (moodOption) moodOption.checked = true;
+    }
+
+    // --- Word counter ---
+    reflection.addEventListener("input", () => {
+      const words = reflection.value.trim().split(/\s+/).filter(w => w.length > 0);
+      wordCount.textContent = `${words.length} words`;
+    });
+    reflection.dispatchEvent(new Event("input"));
+
+    // --- Save Entry ---
     document.getElementById("save-entry").addEventListener("click", () => {
-      localStorage.setItem(key, textarea.value);
-      alert("Entry saved!");
+      const mood = document.querySelector('input[name="mood"]:checked')?.value || "";
+      const data = {
+        reflection: reflection.value,
+        gratitude: gratitude.value,
+        goals: goals.value,
+        mood
+      };
+      localStorage.setItem(key, JSON.stringify(data));
+      alert("✅ Your journal entry has been saved successfully!");
     });
   </script>
 </body>
 </html>
+
