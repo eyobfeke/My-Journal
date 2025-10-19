@@ -36,7 +36,7 @@ function buildCalendar() {
 
     day.addEventListener("click", () => {
       const dateString = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-      window.location.href = `entries/${dateString}.html`;
+      window.location.href = `entries/day.html?date=${dateString}`;
     });
 
     calendarGrid.appendChild(day);
