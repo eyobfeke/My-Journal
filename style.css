@@ -79,3 +79,26 @@ footer {
   background: #fff;
   border-top: 1px solid #e0e0e0;
 }
+/* Calendar layout */
+#calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  padding: 10px;
+}
+
+.day, .empty {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f8f8f8;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.day:hover {
+  background: #e0f0ff;
+}
