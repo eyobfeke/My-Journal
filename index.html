@@ -1,11 +1,33 @@
-journal-site/
-│
-├── index.html          → Main page (calendar + weekly analysis)
-├── day.html            → Template for each day’s journal
-├── style.css           → Styles for the whole site
-├── script.js           → Calendar & navigation logic
-├── entries/            → Folder where daily entries (markdown or HTML) are stored
-│   ├── 2025-10-19.html
-│   └── ...
-└── assets/
-    └── icons/          → optional icons or images
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Journal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🪶 My Journal</h1>
+    <p>Reflect, write, and grow — one day at a time</p>
+  </header>
+
+  <main>
+    <section id="calendar">
+      <h2>📅 Calendar</h2>
+      <div id="calendar-grid"></div>
+    </section>
+
+    <section id="weekly-summary">
+      <h2>📈 Weekly Summary</h2>
+      <textarea id="weekly-notes" placeholder="Write your reflections here..."></textarea>
+    </section>
+  </main>
+
+  <footer>
+    <p>Made with ❤️ using GitHub Pages</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
