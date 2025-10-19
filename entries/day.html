@@ -1,1 +1,45 @@
-entries/day.html?date=2025-10-20
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Journal</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header>
+    <h1 id="entry-date">Loading...</h1>
+    <a href="../index.html">← Back to Calendar</a>
+  </header>
+
+  <main>
+    <textarea id="entry-text" placeholder="Write your reflections for this day..."></textarea>
+    <button id="save-entry">Save Entry</button>
+  </main>
+
+  <footer>
+    <p>Made with ❤️ using GitHub Pages</p>
+  </footer>
+
+  <script>
+    // Read the date from the URL
+    const params = new URLSearchParams(window.location.search);
+    const date = params.get("date");
+    const title = document.getElementById("entry-date");
+    const textarea = document.getElementById("entry-text");
+
+    // Show the date on top
+    title.textContent = date ? `Journal for ${date}` : "No date selected";
+
+    // Load any saved entry from localStorage
+    const key = `entry-${date}`;
+    textarea.value = localStorage.getItem(key) || "";
+
+    // Save entry when button is clicked
+    document.getElementById("save-entry").addEventListener("click", () => {
+      localStorage.setItem(key, textarea.value);
+      alert("Entry saved!");
+    });
+  </script>
+</body>
+</html>
