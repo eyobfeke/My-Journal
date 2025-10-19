@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Journal - 2025-10-19</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header>
+    <h1>📝 Journal — 2025-10-19</h1>
+    <a href="../index.html">← Back to Calendar</a>
+  </header>
+
+  <main>
+    <section>
+      <textarea id="entry" placeholder="Write about your day..."></textarea>
+    </section>
+  </main>
+
+  <script>
+    const date = '2025-10-19';
+    const entry = document.getElementById('entry');
+    const saved = localStorage.getItem(date);
+    if (saved) entry.value = saved;
+    entry.addEventListener('input', () => localStorage.setItem(date, entry.value));
+  </script>
+</body>
+</html>
