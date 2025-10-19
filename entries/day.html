@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Daily Journal</title>
+  <title>My Trading Journal</title>
   <link rel="stylesheet" href="../style.css" />
   <style>
     body {
@@ -32,16 +32,12 @@
     }
 
     main {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: 30px auto;
       padding: 20px;
       background-color: white;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    section {
-      margin-bottom: 25px;
     }
 
     h2 {
@@ -50,7 +46,26 @@
       font-size: 1.3rem;
     }
 
-    textarea, input, select {
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 25px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background-color: #f3f3f3;
+      color: #333;
+      font-weight: 600;
+    }
+
+    textarea, input {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
@@ -93,23 +108,9 @@
       color: #666;
     }
 
-    .mood-options {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-start;
-    }
-
-    .mood-options label {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.95rem;
-    }
-
     @media (max-width: 700px) {
-      main {
-        padding: 15px;
-      }
+      main { padding: 15px; }
+      table { font-size: 0.85rem; }
     }
   </style>
 </head>
@@ -121,6 +122,36 @@
   </header>
 
   <main>
+    <section id="trades">
+      <h2>📊 Trade Performance Summary</h2>
+      <table id="trade-table">
+        <thead>
+          <tr>
+            <th>Win</th>
+            <th>Loss</th>
+            <th>On Going</th>
+            <th>Risk Reward Ratio</th>
+            <th>Win Rate</th>
+            <th>Missed Wins</th>
+            <th>PnL</th>
+            <th>Invalid Loss</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="number" id="win" min="0" /></td>
+            <td><input type="number" id="loss" min="0" /></td>
+            <td><input type="number" id="ongoing" min="0" /></td>
+            <td><input type="text" id="riskreward" placeholder="1:2" /></td>
+            <td><input type="text" id="winrate" placeholder="%" /></td>
+            <td><input type="number" id="missed" min="0" /></td>
+            <td><input type="number" id="pnl" step="0.01" /></td>
+            <td><input type="number" id="invalid" min="0" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
     <section id="mood">
       <h2>🌤️ Mood Tracker</h2>
       <div class="mood-options">
@@ -164,24 +195,29 @@
     const title = document.getElementById("entry-date");
     title.textContent = date ? `Journal for ${date}` : "No date selected";
 
-    // --- Form Elements ---
+    // --- Local Storage Key ---
+    const key = `entry-${date}`;
+
+    // --- Elements ---
     const reflection = document.getElementById("reflection-text");
     const gratitude = document.getElementById("gratitude-text");
     const goals = document.getElementById("goals-text");
     const wordCount = document.getElementById("word-count");
 
-    // --- Local Storage Key ---
-    const key = `entry-${date}`;
+    const fields = ["win", "loss", "ongoing", "riskreward", "winrate", "missed", "pnl", "invalid"];
 
     // --- Load saved data ---
     const saved = JSON.parse(localStorage.getItem(key)) || {};
-    if (saved.reflection) reflection.value = saved.reflection;
-    if (saved.gratitude) gratitude.value = saved.gratitude;
-    if (saved.goals) goals.value = saved.goals;
+    reflection.value = saved.reflection || "";
+    gratitude.value = saved.gratitude || "";
+    goals.value = saved.goals || "";
     if (saved.mood) {
       const moodOption = document.querySelector(`input[name="mood"][value="${saved.mood}"]`);
       if (moodOption) moodOption.checked = true;
     }
+    fields.forEach(id => {
+      if (saved[id]) document.getElementById(id).value = saved[id];
+    });
 
     // --- Word counter ---
     reflection.addEventListener("input", () => {
@@ -197,12 +233,16 @@
         reflection: reflection.value,
         gratitude: gratitude.value,
         goals: goals.value,
-        mood
+        mood,
       };
+      fields.forEach(id => {
+        data[id] = document.getElementById(id).value;
+      });
       localStorage.setItem(key, JSON.stringify(data));
-      alert("✅ Your journal entry has been saved successfully!");
+      alert("✅ Journal entry and trade data saved!");
     });
   </script>
 </body>
 </html>
+
 
