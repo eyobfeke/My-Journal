@@ -1,32 +1,57 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Journal</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Journal — Calendar</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>🪶 My Journal</h1>
-    <p>Reflect, write, and grow — one day at a time</p>
-  </header>
+  <div class="topbar">
+    <div class="brand">🪶 My Journal</div>
+    <div class="controls">
+      <button id="theme-toggle">🌙</button>
+    </div>
+  </div>
 
-  <main>
-    <section id="calendar">
-      <h2>📅 Calendar</h2>
-      <div id="calendar-grid"></div>
+  <main class="container">
+    <header class="page-header">
+      <h1>Calendar</h1>
+      <p class="subtitle">Click any day to open the journal entry</p>
+    </header>
+
+    <section class="calendar-card">
+      <div class="calendar-header">
+        <button id="prev-month" class="nav-btn">‹</button>
+        <h2 id="month-title"></h2>
+        <button id="next-month" class="nav-btn">›</button>
+      </div>
+      <div id="calendar-grid" class="calendar-grid"></div>
     </section>
 
-    <section id="weekly-summary">
-      <h2>📈 Weekly Summary</h2>
-      <textarea id="weekly-notes" placeholder="Write your reflections here..."></textarea>
+    <section class="summary-card">
+      <h2>📆 Monthly — 4-Week Breakdown</h2>
+      <p class="small">This splits the current month into four ranges (1–7, 8–14, 15–21, 22+)</p>
+      <table id="four-week-summary">
+        <thead>
+          <tr>
+            <th>Week</th>
+            <th>Wins</th>
+            <th>Losses</th>
+            <th>Ongoing</th>
+            <th>Total PnL</th>
+            <th>Win Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Week 1 (1–7)</td><td id="w1-wins">0</td><td id="w1-loss">0</td><td id="w1-ongoing">0</td><td id="w1-pnl">0.00</td><td id="w1-rate">0%</td></tr>
+          <tr><td>Week 2 (8–14)</td><td id="w2-wins">0</td><td id="w2-loss">0</td><td id="w2-ongoing">0</td><td id="w2-pnl">0.00</td><td id="w2-rate">0%</td></tr>
+          <tr><td>Week 3 (15–21)</td><td id="w3-wins">0</td><td id="w3-loss">0</td><td id="w3-ongoing">0</td><td id="w3-pnl">0.00</td><td id="w3-rate">0%</td></tr>
+          <tr><td>Week 4 (22+)</td><td id="w4-wins">0</td><td id="w4-loss">0</td><td id="w4-ongoing">0</td><td id="w4-pnl">0.00</td><td id="w4-rate">0%</td></tr>
+        </tbody>
+      </table>
     </section>
   </main>
-
-  <footer>
-    <p>Made with ❤️ using GitHub Pages</p>
-  </footer>
 
   <script src="script.js"></script>
 </body>
