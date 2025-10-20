@@ -16,10 +16,12 @@
       padding: 0;
       transition: background 0.3s, color 0.3s;
     }
+
     body.light {
       background: #f8f9fa;
       color: #222;
     }
+
     body.dark {
       background: #1e1e1e;
       color: #ddd;
@@ -37,6 +39,7 @@
     h1 {
       text-align: center;
     }
+
     .back-link {
       display: block;
       text-align: center;
@@ -65,6 +68,7 @@
       cursor: pointer;
       transition: 0.3s;
     }
+
     #theme-toggle:hover {
       background: #666;
     }
@@ -75,11 +79,13 @@
       border-collapse: collapse;
       margin-bottom: 15px;
     }
+
     th, td {
       border: 1px solid #ccc;
       padding: 8px;
       text-align: center;
     }
+
     th {
       background-color: #f3f4f6;
     }
@@ -93,6 +99,7 @@
       border-radius: 6px;
       cursor: pointer;
     }
+
     .add-btn:hover {
       background: #0056b3;
     }
@@ -125,14 +132,34 @@
       font-size: 0.85rem;
     }
 
+    /* === IMAGE PREVIEW === */
+    .img-preview {
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .preview-thumb {
+      max-width: 80px;
+      max-height: 80px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .preview-thumb:hover {
+      transform: scale(1.05);
+    }
+
     /* === DARK THEME ADJUSTMENTS === */
     body.dark .card {
       background: #2b2b2b;
       border-color: #555;
     }
+
     body.dark th {
       background-color: #333;
     }
+
     body.dark table, body.dark textarea, body.dark input {
       background: #2e2e2e;
       color: #ddd;
@@ -173,7 +200,10 @@
             <td><input type="text" placeholder="Exit Price"></td>
             <td><input type="text" placeholder="1:2, 1:3, etc."></td>
             <td><textarea placeholder="Why I took this trade..."></textarea></td>
-            <td><input type="file" accept="image/*"></td>
+            <td>
+              <input type="file" accept="image/*" onchange="previewImage(this)">
+              <div class="img-preview"></div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -264,9 +294,37 @@
         <td><input type="text" placeholder="Exit Price"></td>
         <td><input type="text" placeholder="1:2, 1:3, etc."></td>
         <td><textarea placeholder="Why I took this trade..."></textarea></td>
-        <td><input type="file" accept="image/*"></td>
+        <td>
+          <input type="file" accept="image/*" onchange="previewImage(this)">
+          <div class="img-preview"></div>
+        </td>
       `;
       table.appendChild(row);
+    }
+
+    // === IMAGE PREVIEW FUNCTION ===
+    function previewImage(input) {
+      const preview = input.nextElementSibling;
+      preview.innerHTML = ""; // Clear previous image to avoid duplicates
+
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.alt = "Screenshot Preview";
+          img.classList.add("preview-thumb");
+
+          // Click image to open in new tab
+          img.addEventListener("click", () => {
+            const newTab = window.open();
+            newTab.document.write(`<img src="${e.target.result}" style="max-width:100%">`);
+          });
+
+          preview.appendChild(img);
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
     }
   </script>
 </body>
