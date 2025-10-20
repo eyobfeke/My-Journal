@@ -3,13 +3,13 @@
 
 // ----- Theme toggle -----
 const themeToggle = document.getElementById('theme-toggle');
-const savedTheme = localStorage.getItem('theme') || 'light';
-if(savedTheme === 'dark') document.body.classList.add('dark');
+const savedTheme = localStorage.getItem('theme') || 'dark';
+if(savedTheme === 'light') document.body.classList.add('light');
 themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 themeToggle.addEventListener('click', () => {
-  const dark = document.body.classList.toggle('dark');
-  localStorage.setItem('theme', dark ? 'dark' : 'light');
-  themeToggle.textContent = dark ? '☀️' : '🌙';
+  const light = document.body.classList.toggle('light');
+  localStorage.setItem('theme', light ? 'light' : 'dark');
+  themeToggle.textContent = light ? '🌙' : '☀️';
 });
 
 // ----- Calendar generation -----
