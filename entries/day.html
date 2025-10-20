@@ -3,321 +3,269 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Trading Journal</title>
+  <title>Daily Journal</title>
   <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2737/2737128.png">
-  
   <style>
     :root {
-      --light-bg: #f8f9fa;
-      --light-text: #222;
-      --light-card: #ffffff;
-
-      --dark-bg: #121212;
-      --dark-text: #dddddd;
-      --dark-card: #1e1e1e;
+      --bg-light: #f4f4f4;
+      --text-light: #222;
+      --bg-dark: #121212;
+      --text-dark: #f1f1f1;
+      --card-bg-light: #fff;
+      --card-bg-dark: #1e1e1e;
+      --accent: #2e8b57;
     }
 
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 0;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    body.light {
-      background: var(--light-bg);
-      color: var(--light-text);
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: all 0.3s ease;
     }
 
     body.dark {
-      background: var(--dark-bg);
-      color: var(--dark-text);
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
     }
 
     main {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      background: var(--light-card);
-      transition: background 0.3s;
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 20px;
+      background: var(--card-bg-light);
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     body.dark main {
-      background: var(--dark-card);
+      background: var(--card-bg-dark);
+      box-shadow: 0 0 15px rgba(255,255,255,0.05);
     }
 
     h1 {
       text-align: center;
-    }
-
-    .back-link {
-      display: block;
-      text-align: center;
-      margin-bottom: 15px;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    #logo {
-      display: block;
-      width: 80px;
-      margin: 0 auto 10px auto;
-    }
-
-    #theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #444;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    #theme-toggle:hover {
-      background: #666;
+      margin-bottom: 20px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
 
     th, td {
       border: 1px solid #ccc;
-      padding: 8px;
-      text-align: center;
+      padding: 10px;
+      text-align: left;
     }
 
-    th {
-      background-color: #f3f4f6;
+    body.dark th, body.dark td {
+      border: 1px solid #333;
     }
 
-    body.dark th {
-      background-color: #2b2b2b;
-    }
-
-    .add-btn {
-      background: #007bff;
+    button {
+      background-color: var(--accent);
       color: white;
-      padding: 8px 16px;
       border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .add-btn:hover {
-      background: #0056b3;
-    }
-
-    .card {
-      background: var(--light-card);
-      border: 1px solid #ddd;
+      padding: 8px 14px;
       border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 20px;
-      transition: background 0.3s, border-color 0.3s;
-    }
-
-    body.dark .card {
-      background: var(--dark-card);
-      border-color: #555;
-    }
-
-    textarea, input {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      background: inherit;
-      color: inherit;
-    }
-
-    body.dark textarea, 
-    body.dark input {
-      border-color: #555;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 0.85rem;
-    }
-
-    .img-preview {
-      margin-top: 8px;
-      text-align: center;
-    }
-
-    .preview-thumb {
-      max-width: 80px;
-      max-height: 80px;
-      border-radius: 6px;
       cursor: pointer;
-      transition: transform 0.2s;
+      margin-bottom: 10px;
+      transition: 0.2s;
     }
 
-    .preview-thumb:hover {
-      transform: scale(1.05);
+    button:hover {
+      background-color: #246b44;
     }
 
-    #image-overlay {
+    #theme-toggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 6px 10px;
+      font-size: 14px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    body.dark textarea {
+      background-color: #222;
+      color: #eee;
+      border-color: #444;
+    }
+
+    #logo {
+      display: block;
+      width: 80px;
+      margin: 10px auto;
+    }
+
+    .image-preview {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    .modal {
       display: none;
       position: fixed;
-      top: 0;
+      z-index: 1000;
       left: 0;
+      top: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background-color: rgba(0,0,0,0.9);
       justify-content: center;
       align-items: center;
-      z-index: 1000;
     }
 
-    #image-overlay img {
+    .modal img {
       max-width: 90%;
       max-height: 90%;
       border-radius: 10px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
     }
   </style>
 </head>
-
-<body class="light">
+<body>
   <button id="theme-toggle">🌙 Dark Mode</button>
-
   <main>
-    <a href="index.html" class="back-link">← Back to Calendar</a>
     <img src="https://cdn-icons-png.flaticon.com/512/2737/2737128.png" alt="Bull Logo" id="logo">
-    <h1>Journal for <span id="journal-date"></span></h1>
+    <h1>Daily Journal - <span id="journal-date"></span></h1>
 
-    <!-- TRADE DETAILS -->
-    <div class="card">
-      <h2>📊 Trade Details</h2>
-      <table id="trade-table">
-        <thead>
-          <tr>
-            <th>Pair</th>
-            <th>Entry</th>
-            <th>Exit</th>
-            <th>R/R</th>
-            <th>PNL</th>
-            <th>Setup Notes</th>
-            <th>Screenshot</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><input type="text" placeholder="EUR/USD"></td>
-            <td><input type="text" placeholder="Entry Price"></td>
-            <td><input type="text" placeholder="Exit Price"></td>
-            <td><input type="text" placeholder="1:2, 1:3, etc."></td>
-            <td><input type="text" placeholder="+50 pips / -20 pips"></td>
-            <td><textarea placeholder="Why I took this trade..."></textarea></td>
-            <td>
-              <input type="file" accept="image/*" onchange="previewImage(this)">
-              <div class="img-preview"></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button class="add-btn" onclick="addTrade()">+ Add Trade</button>
-    </div>
+    <!-- Trade Details Section -->
+    <h2>Trade Details</h2>
+    <button id="add-trade">Add Trade</button>
+    <table id="trade-table">
+      <thead>
+        <tr>
+          <th>Pair</th>
+          <th>Entry</th>
+          <th>Exit</th>
+          <th>R:R</th>
+          <th>Notes</th>
+          <th>PNL</th>
+          <th>Screenshot</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-    <!-- NOTES -->
-    <div class="card">
-      <h2>📝 Daily Reflection</h2>
-      <div class="grid">
-        <textarea placeholder="What went well today?"></textarea>
-        <textarea placeholder="What can I improve?"></textarea>
-        <textarea placeholder="How was my mindset today?"></textarea>
-        <textarea placeholder="What’s my plan for tomorrow?"></textarea>
-      </div>
-    </div>
+    <!-- Daily Summary -->
+    <h2>Daily Summary</h2>
+    <textarea placeholder="Summarize your overall performance today..."></textarea>
 
-    <footer>
-      <p>Made with ❤️ by Eyob for personal trading growth.</p>
-    </footer>
+    <!-- Additional Journal Sections -->
+    <h2>Emotions</h2>
+    <textarea placeholder="How did you feel before, during, and after trading?"></textarea>
+
+    <h2>Market Conditions</h2>
+    <textarea placeholder="Describe the market trend, volatility, and key news events..."></textarea>
+
+    <h2>Mistakes & Lessons</h2>
+    <textarea placeholder="What mistakes did you make? What can you learn from them?"></textarea>
+
+    <h2>Tomorrow’s Plan</h2>
+    <textarea placeholder="What’s your strategy or focus for tomorrow?"></textarea>
+
+    <h2>Mindset Notes</h2>
+    <textarea placeholder="Any final reflections or thoughts about your mindset today..."></textarea>
   </main>
 
-  <!-- Overlay for enlarged image -->
-  <div id="image-overlay">
-    <img src="" alt="Enlarged Screenshot">
+  <!-- Image Modal -->
+  <div id="img-modal" class="modal">
+    <span class="close-modal">&times;</span>
+    <img id="modal-img" src="">
   </div>
 
   <script>
-    const themeToggle = document.getElementById("theme-toggle");
-    const body = document.body;
+    // Theme handling
+    const themeToggle = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    if (currentTheme === 'dark') document.body.classList.add('dark');
+    themeToggle.textContent = currentTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
 
-    themeToggle.addEventListener("click", () => {
-      body.classList.toggle("dark");
-      body.classList.toggle("light");
-      themeToggle.textContent = body.classList.contains("dark") ? "☀️ Light Mode" : "🌙 Dark Mode";
-    });
+    themeToggle.onclick = () => {
+      document.body.classList.toggle('dark');
+      const theme = document.body.classList.contains('dark') ? 'dark' : 'light';
+      localStorage.setItem('theme', theme);
+      themeToggle.textContent = theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    };
 
-    // Display current date
-    const dateParam = new URLSearchParams(window.location.search).get("date");
-    const journalDate = document.getElementById("journal-date");
-    journalDate.textContent = dateParam ? dateParam : new Date().toDateString();
+    // Set journal date
+    const params = new URLSearchParams(window.location.search);
+    const date = params.get("date");
+    if (date) document.getElementById("journal-date").textContent = date;
 
-    // Add new trade row
-    function addTrade() {
-      const table = document.querySelector("#trade-table tbody");
+    // Trade table logic
+    const addTradeBtn = document.getElementById("add-trade");
+    const tradeTable = document.getElementById("trade-table").querySelector("tbody");
+    addTradeBtn.addEventListener("click", () => addTradeRow());
+
+    function addTradeRow() {
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td><input type="text" placeholder="EUR/USD"></td>
-        <td><input type="text" placeholder="Entry Price"></td>
-        <td><input type="text" placeholder="Exit Price"></td>
-        <td><input type="text" placeholder="1:2, 1:3, etc."></td>
-        <td><input type="text" placeholder="+50 pips / -20 pips"></td>
-        <td><textarea placeholder="Why I took this trade..."></textarea></td>
+        <td><input type="text" placeholder="e.g. EUR/USD"></td>
+        <td><input type="text" placeholder="Entry price"></td>
+        <td><input type="text" placeholder="Exit price"></td>
+        <td><input type="text" placeholder="e.g. 1:2"></td>
+        <td><textarea placeholder="Setup notes..."></textarea></td>
+        <td><input type="text" placeholder="+50 / -20"></td>
         <td>
-          <input type="file" accept="image/*" onchange="previewImage(this)">
-          <div class="img-preview"></div>
-        </td>
-      `;
-      table.appendChild(row);
+          <input type="file" accept="image/*" onchange="previewImage(event, this)">
+          <img class="image-preview" style="display:none;">
+        </td>`;
+      tradeTable.appendChild(row);
     }
 
-    // Image preview + enlarge overlay
-    function previewImage(input) {
-      const preview = input.nextElementSibling;
-      preview.innerHTML = ""; // Clear old preview
+    // Image preview + modal
+    const modal = document.getElementById("img-modal");
+    const modalImg = document.getElementById("modal-img");
+    const closeModal = document.querySelector(".close-modal");
 
-      if (input.files && input.files[0]) {
+    window.previewImage = (event, input) => {
+      const file = event.target.files[0];
+      if (file) {
         const reader = new FileReader();
-        reader.onload = function (e) {
-          const img = document.createElement("img");
+        reader.onload = e => {
+          const img = input.nextElementSibling;
           img.src = e.target.result;
-          img.classList.add("preview-thumb");
-          preview.appendChild(img);
-
-          img.addEventListener("click", () => {
-            const overlay = document.getElementById("image-overlay");
-            overlay.style.display = "flex";
-            overlay.querySelector("img").src = e.target.result;
-          });
+          img.style.display = "block";
+          img.onclick = () => {
+            modal.style.display = "flex";
+            modalImg.src = e.target.result;
+          };
         };
-        reader.readAsDataURL(input.files[0]);
+        reader.readAsDataURL(file);
       }
-    }
+    };
 
-    // Close enlarged image on click
-    document.getElementById("image-overlay").addEventListener("click", () => {
-      document.getElementById("image-overlay").style.display = "none";
-    });
+    closeModal.onclick = () => {
+      modal.style.display = "none";
+    };
+    window.onclick = e => {
+      if (e.target === modal) modal.style.display = "none";
+    };
   </script>
 </body>
 </html>
