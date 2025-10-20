@@ -3,22 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Daily Journal</title>
+  <title>Daily Journal</title>
   <link rel="stylesheet" href="../style.css" />
   <style>
     body {
       font-family: "Segoe UI", sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #fafafa;
-      color: #333;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     header {
       text-align: center;
-      padding: 20px;
-      background-color: #f8f9fa;
-      border-bottom: 1px solid #ddd;
+      padding: 15px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
     }
 
     header a {
@@ -27,90 +30,19 @@
       font-size: 0.9rem;
     }
 
-    header a:hover {
-      text-decoration: underline;
-    }
-
     main {
-      max-width: 1000px;
-      margin: 30px auto;
+      max-width: 1100px;
+      margin: 20px auto;
       padding: 20px;
-      background-color: white;
+      background-color: var(--card-bg, #fff);
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
-    section {
-      margin-bottom: 25px;
-    }
-
-    h2 {
-      margin-bottom: 10px;
-      color: #222;
-      font-size: 1.3rem;
-    }
-
-    textarea, input, select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      resize: none;
-    }
-
-    textarea {
-      height: 150px;
-    }
-
-    #save-entry {
-      width: 100%;
-      padding: 15px;
-      font-size: 1.2rem;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    #save-entry:hover {
-      background: #005fcc;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      padding: 10px;
-      color: #555;
-    }
-
-    .stats {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    .mood-options {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-start;
-    }
-
-    .mood-options label {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.95rem;
-    }
-
-    /* --- Trade Table --- */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      margin-bottom: 30px;
     }
 
     th, td {
@@ -120,61 +52,87 @@
     }
 
     th {
-      background-color: #f2f2f2;
+      background-color: var(--table-header-bg, #f4f4f4);
+      font-weight: 600;
     }
 
-    button.add-trade {
-      background-color: #28a745;
+    section {
+      margin-bottom: 25px;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      padding: 10px;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #007bff;
       color: white;
-      padding: 10px 20px;
       border: none;
-      border-radius: 6px;
+      padding: 10px 15px;
+      border-radius: 8px;
       cursor: pointer;
-      margin-top: 10px;
+      font-size: 1rem;
+      transition: background 0.3s;
     }
 
-    button.add-trade:hover {
-      background-color: #218838;
+    button:hover {
+      background-color: #005fcc;
+    }
+
+    #save-entry {
+      width: 100%;
+      margin-top: 20px;
+      font-size: 1.1rem;
+      padding: 12px;
     }
 
     .screenshot-preview {
-      max-width: 100px;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: transform 0.2s;
-    }
-
-    .screenshot-preview:hover {
-      transform: scale(1.1);
-    }
-
-    .modal {
+      max-width: 100%;
+      margin-top: 10px;
       display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      border-radius: 8px;
+      border: 1px solid #ccc;
     }
 
-    .modal img {
-      display: block;
-      max-width: 80%;
-      max-height: 80%;
-      margin: 5% auto;
-      border-radius: 10px;
+    /* Dark mode overrides */
+    body.dark {
+      background-color: #121212;
+      color: #ddd;
     }
 
-    @media (max-width: 700px) {
-      main {
-        padding: 15px;
-      }
+    body.dark main {
+      background-color: #1e1e1e;
+    }
+
+    body.dark th {
+      background-color: #2c2c2c;
+    }
+
+    body.dark textarea {
+      background-color: #2a2a2a;
+      color: #ddd;
+      border-color: #555;
+    }
+
+    body.dark button {
+      background-color: #3399ff;
     }
   </style>
 </head>
-
 <body>
   <header>
     <h1 id="entry-date">Loading...</h1>
@@ -182,9 +140,9 @@
   </header>
 
   <main>
-    <!-- ✅ TRADE DETAILS -->
+    <!-- Trade Details -->
     <section id="trade-details">
-      <h2>💹 Trade Details</h2>
+      <button id="add-trade">Add Trade</button>
       <table id="trade-table">
         <thead>
           <tr>
@@ -192,162 +150,124 @@
             <th>Entry</th>
             <th>Exit</th>
             <th>R:R</th>
-            <th>PnL</th>
             <th>Notes</th>
+            <th>PNL</th>
             <th>Screenshot</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          <tr>
+            <td><input type="text" placeholder="e.g. EUR/USD" /></td>
+            <td><input type="text" placeholder="Entry price" /></td>
+            <td><input type="text" placeholder="Exit price" /></td>
+            <td><input type="text" placeholder="e.g. 1:2" /></td>
+            <td><textarea placeholder="Setup notes..."></textarea></td>
+            <td><input type="text" placeholder="+50 / -20" /></td>
+            <td>
+              <input type="file" accept="image/*" class="screenshot-input" />
+              <img class="screenshot-preview" />
+            </td>
+          </tr>
+        </tbody>
       </table>
-      <button class="add-trade">➕ Add Trade</button>
     </section>
 
-    <!-- ✅ Mood Tracker -->
-    <section id="mood">
-      <h2>🌤️ Mood Tracker</h2>
-      <div class="mood-options">
-        <label><input type="radio" name="mood" value="😊" /> Happy</label>
-        <label><input type="radio" name="mood" value="😐" /> Neutral</label>
-        <label><input type="radio" name="mood" value="😔" /> Sad</label>
-        <label><input type="radio" name="mood" value="😤" /> Stressed</label>
-        <label><input type="radio" name="mood" value="😎" /> Confident</label>
-      </div>
+    <!-- Daily Sections (Restored Like Before) -->
+    <section id="daily-summary">
+      <h2>📈 Daily Summary</h2>
+      <textarea placeholder="Summarize your overall performance today..."></textarea>
     </section>
 
-    <!-- ✅ Reflection -->
-    <section id="reflection">
-      <h2>📝 Daily Reflection</h2>
-      <textarea id="reflection-text" placeholder="Write your thoughts, experiences, and lessons for the day..."></textarea>
-      <div class="stats"><span id="word-count">0 words</span></div>
+    <section id="emotions">
+      <h2>😌 Emotions</h2>
+      <textarea placeholder="How did you feel before, during, and after trading?"></textarea>
     </section>
 
-    <!-- ✅ Gratitude -->
-    <section id="gratitude">
-      <h2>🙏 Gratitude List</h2>
-      <textarea id="gratitude-text" placeholder="List things you’re grateful for today..."></textarea>
+    <section id="market-conditions">
+      <h2>🌍 Market Conditions</h2>
+      <textarea placeholder="Describe the market trend, volatility, and any key news events..."></textarea>
     </section>
 
-    <!-- ✅ Tomorrow Goals -->
-    <section id="goals">
-      <h2>🎯 Tomorrow’s Goals</h2>
-      <textarea id="goals-text" placeholder="Write what you want to achieve tomorrow..."></textarea>
+    <section id="mistakes">
+      <h2>⚠️ Mistakes & Lessons</h2>
+      <textarea placeholder="What mistakes did you make? What can you learn from them?"></textarea>
     </section>
 
-    <section id="actions">
-      <button id="save-entry">💾 Save Entry</button>
+    <section id="tomorrows-plan">
+      <h2>🎯 Tomorrow’s Plan</h2>
+      <textarea placeholder="What’s your strategy or focus for tomorrow?"></textarea>
     </section>
+
+    <section id="mindset">
+      <h2>🧠 Mindset Notes</h2>
+      <textarea placeholder="Any final reflections or thoughts about your mindset today..."></textarea>
+    </section>
+
+    <button id="save-entry">💾 Save Entry</button>
   </main>
 
-  <footer>
-    <p>Made with ❤️ using GitHub Pages</p>
-  </footer>
-
-  <!-- Image modal -->
-  <div id="img-modal" class="modal">
-    <img id="modal-img" src="" alt="Enlarged Screenshot" />
-  </div>
-
   <script>
+    // Set date
     const params = new URLSearchParams(window.location.search);
     const date = params.get("date");
-    document.getElementById("entry-date").textContent = date ? `Journal for ${date}` : "No date selected";
-    const key = `entry-${date}`;
+    document.getElementById("entry-date").textContent = date ? `Journal for ${date}` : "Journal Entry";
 
-    const reflection = document.getElementById("reflection-text");
-    const gratitude = document.getElementById("gratitude-text");
-    const goals = document.getElementById("goals-text");
-    const wordCount = document.getElementById("word-count");
-    const tbody = document.querySelector("#trade-table tbody");
-    const modal = document.getElementById("img-modal");
-    const modalImg = document.getElementById("modal-img");
-
-    // Load saved data
-    const saved = JSON.parse(localStorage.getItem(key)) || { trades: [] };
-    reflection.value = saved.reflection || "";
-    gratitude.value = saved.gratitude || "";
-    goals.value = saved.goals || "";
-
-    if (saved.trades.length) saved.trades.forEach(addTradeRow);
-
-    if (saved.mood) {
-      const moodOption = document.querySelector(`input[name="mood"][value="${saved.mood}"]`);
-      if (moodOption) moodOption.checked = true;
-    }
-
-    reflection.addEventListener("input", () => {
-      const words = reflection.value.trim().split(/\s+/).filter(w => w.length > 0);
-      wordCount.textContent = `${words.length} words`;
-    });
-    reflection.dispatchEvent(new Event("input"));
-
-    document.querySelector(".add-trade").addEventListener("click", () => addTradeRow());
-
-    function addTradeRow(data = {}) {
+    // Add new trade row
+    document.getElementById("add-trade").addEventListener("click", () => {
+      const tbody = document.querySelector("#trade-table tbody");
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td><input type="text" value="${data.pair || ""}" placeholder="e.g. EUR/USD"></td>
-        <td><input type="text" value="${data.entry || ""}" placeholder="1.0750"></td>
-        <td><input type="text" value="${data.exit || ""}" placeholder="1.0800"></td>
-        <td><input type="text" value="${data.rr || ""}" placeholder="2R"></td>
-        <td><input type="text" value="${data.pnl || ""}" placeholder="+2.5%"></td>
-        <td><textarea placeholder="Notes...">${data.notes || ""}</textarea></td>
+        <td><input type="text" placeholder="e.g. EUR/USD" /></td>
+        <td><input type="text" placeholder="Entry price" /></td>
+        <td><input type="text" placeholder="Exit price" /></td>
+        <td><input type="text" placeholder="e.g. 1:2" /></td>
+        <td><textarea placeholder="Setup notes..."></textarea></td>
+        <td><input type="text" placeholder="+50 / -20" /></td>
         <td>
-          <input type="file" accept="image/*" class="screenshot-upload" />
-          ${data.screenshot ? `<img src="${data.screenshot}" class="screenshot-preview" />` : ""}
+          <input type="file" accept="image/*" class="screenshot-input" />
+          <img class="screenshot-preview" />
         </td>
       `;
       tbody.appendChild(row);
+    });
 
-      const upload = row.querySelector(".screenshot-upload");
-      upload.addEventListener("change", (e) => {
+    // Screenshot preview
+    document.addEventListener("change", (e) => {
+      if (e.target.classList.contains("screenshot-input")) {
         const file = e.target.files[0];
+        const img = e.target.nextElementSibling;
         if (file) {
           const reader = new FileReader();
-          reader.onload = (event) => {
-            const img = document.createElement("img");
-            img.src = event.target.result;
-            img.className = "screenshot-preview";
-            upload.insertAdjacentElement("afterend", img);
-            img.addEventListener("click", () => showModal(img.src));
+          reader.onload = () => {
+            img.src = reader.result;
+            img.style.display = "block";
+            img.style.maxHeight = "200px";
           };
           reader.readAsDataURL(file);
         }
-      });
+      }
+    });
 
-      row.querySelectorAll(".screenshot-preview").forEach(img => {
-        img.addEventListener("click", () => showModal(img.src));
-      });
-    }
-
-    modal.addEventListener("click", () => modal.style.display = "none");
-
-    function showModal(src) {
-      modalImg.src = src;
-      modal.style.display = "block";
-    }
-
+    // Save to local storage
     document.getElementById("save-entry").addEventListener("click", () => {
-      const mood = document.querySelector('input[name="mood"]:checked')?.value || "";
-      const trades = [...tbody.querySelectorAll("tr")].map(row => ({
-        pair: row.cells[0].querySelector("input").value,
-        entry: row.cells[1].querySelector("input").value,
-        exit: row.cells[2].querySelector("input").value,
-        rr: row.cells[3].querySelector("input").value,
-        pnl: row.cells[4].querySelector("input").value,
-        notes: row.cells[5].querySelector("textarea").value,
-        screenshot: row.cells[6].querySelector(".screenshot-preview")?.src || ""
-      }));
-
       const data = {
-        reflection: reflection.value,
-        gratitude: gratitude.value,
-        goals: goals.value,
-        mood,
-        trades
+        trades: Array.from(document.querySelectorAll("#trade-table tbody tr")).map(tr => ({
+          pair: tr.cells[0].querySelector("input").value,
+          entry: tr.cells[1].querySelector("input").value,
+          exit: tr.cells[2].querySelector("input").value,
+          rr: tr.cells[3].querySelector("input").value,
+          notes: tr.cells[4].querySelector("textarea").value,
+          pnl: tr.cells[5].querySelector("input").value,
+        })),
+        summary: document.querySelector("#daily-summary textarea").value,
+        emotions: document.querySelector("#emotions textarea").value,
+        market: document.querySelector("#market-conditions textarea").value,
+        mistakes: document.querySelector("#mistakes textarea").value,
+        plan: document.querySelector("#tomorrows-plan textarea").value,
+        mindset: document.querySelector("#mindset textarea").value,
       };
-
-      localStorage.setItem(key, JSON.stringify(data));
-      alert("✅ Your journal entry has been saved successfully!");
+      localStorage.setItem(`entry-${date}`, JSON.stringify(data));
+      alert("✅ Entry saved successfully!");
     });
   </script>
 </body>
