@@ -20,7 +20,7 @@ body.light {
 *{box-sizing:border-box}
 body{
   margin:0;
-  background:var(--bg);
+  background:var(--card-bg, #fff);
   color:var(--text);
   font-family:Inter, "Segoe UI", Arial, sans-serif;
   -webkit-font-smoothing:antialiased;
@@ -38,7 +38,7 @@ body{
 }
 .brand{font-weight:700}
 .controls button{
-  background:var(--card);
+  background:var(--card-bg, #fff);
   border:1px solid var(--border);
   padding:6px 10px;
   border-radius:8px;
@@ -57,7 +57,7 @@ body{
 
 /* calendar card */
 .calendar-card{
-  background:var(--card);
+  background:var(--card-bg, #fff);
   border-radius:12px;
   padding:18px;
   box-shadow:0 6px 18px rgba(0,0,0,0.04);
@@ -66,7 +66,7 @@ body{
 }
 .calendar-header{display:flex;justify-content:center;align-items:center;gap:12px;margin-bottom:12px}
 .calendar-header h2{margin:0;font-size:20px}
-.nav-btn{background:var(--card);border:1px solid var(--border);padding:6px 10px;border-radius:8px;cursor:pointer;color:var(--text);font-size:18px}
+.nav-btn{background:var(--card-bg, #fff);border:1px solid var(--border);padding:6px 10px;border-radius:8px;cursor:pointer;color:var(--text);font-size:18px}
 .nav-btn:hover{opacity:0.8;background:rgba(255,255,255,0.1)}
 .calendar-grid{
   display:grid;
