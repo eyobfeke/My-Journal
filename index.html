@@ -144,10 +144,27 @@
       margin-top: 40px;
       font-size: 0.85rem;
     }
+
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      resize: vertical;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      padding: 8px;
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
+
+    body.dark textarea {
+      background: #2a2a2a;
+      border: 1px solid #666;
+      color: #eee;
+    }
   </style>
 </head>
 
-<body class="light">
+<body>
   <button id="theme-toggle">🌙 Dark Mode</button>
 
   <header>
@@ -190,14 +207,24 @@
     const themeToggle = document.getElementById("theme-toggle");
     const body = document.body;
 
-    // Theme toggle
+    // 🔹 Load saved theme preference
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      body.classList.add(savedTheme);
+      themeToggle.textContent = savedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+    } else {
+      body.classList.add("light");
+    }
+
+    // 🔹 Toggle theme + save preference
     themeToggle.addEventListener("click", () => {
-      body.classList.toggle("dark");
-      body.classList.toggle("light");
-      themeToggle.textContent = body.classList.contains("dark") ? "☀️ Light Mode" : "🌙 Dark Mode";
+      const newTheme = body.classList.contains("dark") ? "light" : "dark";
+      body.className = newTheme;
+      localStorage.setItem("theme", newTheme);
+      themeToggle.textContent = newTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
     });
 
-    // Generate calendar days for current month
+    // 🔹 Generate current month calendar
     const calendar = document.getElementById("calendar");
     const today = new Date();
     const year = today.getFullYear();
@@ -210,7 +237,6 @@
       dayDiv.className = "day";
       dayDiv.textContent = day;
 
-      // Link to day.html
       dayDiv.addEventListener("click", () => {
         window.location.href = `day.html?date=${date.toDateString()}`;
       });
@@ -220,4 +246,3 @@
   </script>
 </body>
 </html>
-
