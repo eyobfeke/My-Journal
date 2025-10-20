@@ -40,16 +40,33 @@
     <section>
       <h2>📈 Trade Details</h2>
 
-      <div class="trade-rows">
-        <table id="trade-table">
-          <thead>
-            <tr>
-              <th>Pair</th><th>Entry</th><th>Exit</th><th>R/R</th><th>Notes</th><th>Screenshot</th><th>PnL</th><th>Remove</th>
-            </tr>
-          </thead>
-          <tbody id="trade-body"></tbody>
-        </table>
-      </div>
+      <table id="trade-table">
+    <thead>
+      <tr>
+        <th>Pair</th>
+        <th>Entry</th>
+        <th>Exit</th>
+        <th>R/R</th>
+        <th>Setup Notes</th>
+        <th>Screenshot</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="text" placeholder="EUR/USD"></td>
+        <td><input type="text" placeholder="Entry Price"></td>
+        <td><input type="text" placeholder="Exit Price"></td>
+        <td><input type="text" placeholder="1:2, 1:3, etc."></td>
+        <td><textarea placeholder="Why I took this trade..."></textarea></td>
+        <td>
+          <input type="file" accept="image/*" onchange="previewImage(this)">
+          <div class="img-preview"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button class="add-btn" onclick="addTrade()">+ Add Trade</button>
+</div>
 
       <div style="display:flex;gap:10px;align-items:center;">
         <button id="add-trade" class="btn add-trade">➕ Add Trade</button>
