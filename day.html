@@ -17,7 +17,7 @@
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: "Poppins", sans-serif;
       margin: 0;
       padding: 0;
       background-color: var(--bg-light);
@@ -32,21 +32,74 @@
 
     main {
       max-width: 1000px;
-      margin: 30px auto;
-      padding: 20px;
-      background: var(--card-bg-light);
+      margin: 40px auto;
+      padding: 25px;
       border-radius: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background-color: var(--card-bg-light);
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
 
     body.dark main {
-      background: var(--card-bg-dark);
+      background-color: var(--card-bg-dark);
       box-shadow: 0 0 15px rgba(255,255,255,0.05);
     }
 
-    h1 {
+    h1, h2 {
       text-align: center;
+    }
+
+    button {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background-color: #246b44;
+    }
+
+    #theme-toggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 6px 10px;
+      font-size: 14px;
+    }
+
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+      margin-top: 5px;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    body.dark textarea, body.dark input[type="text"] {
+      background-color: #222;
+      color: #eee;
+      border-color: #444;
+    }
+
+    .section {
       margin-bottom: 20px;
+    }
+
+    #save-btn {
+      display: block;
+      margin: 20px auto;
+      font-weight: bold;
+    }
+
+    .count {
+      font-size: 14px;
+      text-align: right;
+      opacity: 0.7;
     }
 
     table {
@@ -63,51 +116,6 @@
 
     body.dark th, body.dark td {
       border: 1px solid #333;
-    }
-
-    button {
-      background-color: var(--accent);
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-bottom: 10px;
-      transition: 0.2s;
-    }
-
-    button:hover {
-      background-color: #246b44;
-    }
-
-    #theme-toggle {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      padding: 6px 10px;
-      font-size: 14px;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 80px;
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px solid #aaa;
-      resize: vertical;
-      font-family: inherit;
-    }
-
-    body.dark textarea {
-      background-color: #222;
-      color: #eee;
-      border-color: #444;
-    }
-
-    #logo {
-      display: block;
-      width: 80px;
-      margin: 10px auto;
     }
 
     .image-preview {
@@ -145,15 +153,23 @@
       font-size: 30px;
       cursor: pointer;
     }
+
+    a.back-link {
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
   <button id="theme-toggle">🌙 Dark Mode</button>
   <main>
-    <img src="https://cdn-icons-png.flaticon.com/512/2737/2737128.png" alt="Bull Logo" id="logo">
+    <a href="index.html" class="back-link">← Back to Calendar</a>
     <h1>Daily Journal - <span id="journal-date"></span></h1>
 
-    <!-- Trade Details Section -->
+    <!-- Trade Table Section -->
     <h2>Trade Details</h2>
     <button id="add-trade">Add Trade</button>
     <table id="trade-table">
@@ -171,25 +187,33 @@
       <tbody></tbody>
     </table>
 
-    <!-- Daily Summary -->
-    <h2>Daily Summary</h2>
-    <textarea placeholder="Summarize your overall performance today..."></textarea>
+    <!-- Mood Tracker -->
+    <div class="section">
+      <h2>Mood Tracker</h2>
+      <input type="text" id="mood" placeholder="How do you feel today?">
+    </div>
 
-    <!-- Additional Journal Sections -->
-    <h2>Emotions</h2>
-    <textarea placeholder="How did you feel before, during, and after trading?"></textarea>
+    <!-- Daily Goals -->
+    <div class="section">
+      <h2>Daily Goals</h2>
+      <textarea id="goals" placeholder="What are your main goals today?"></textarea>
+    </div>
 
-    <h2>Market Conditions</h2>
-    <textarea placeholder="Describe the market trend, volatility, and key news events..."></textarea>
+    <!-- Reflection -->
+    <div class="section">
+      <h2>Reflection</h2>
+      <textarea id="reflection" placeholder="Write your reflections about today..."></textarea>
+      <div class="count" id="word-count">Words: 0</div>
+    </div>
 
-    <h2>Mistakes & Lessons</h2>
-    <textarea placeholder="What mistakes did you make? What can you learn from them?"></textarea>
+    <!-- Gratitude -->
+    <div class="section">
+      <h2>Gratitude List</h2>
+      <textarea id="gratitude" placeholder="What are you grateful for today?"></textarea>
+    </div>
 
-    <h2>Tomorrow’s Plan</h2>
-    <textarea placeholder="What’s your strategy or focus for tomorrow?"></textarea>
-
-    <h2>Mindset Notes</h2>
-    <textarea placeholder="Any final reflections or thoughts about your mindset today..."></textarea>
+    <!-- Save -->
+    <button id="save-btn">💾 Save Entry</button>
   </main>
 
   <!-- Image Modal -->
@@ -199,25 +223,24 @@
   </div>
 
   <script>
-    // Theme handling
-    const themeToggle = document.getElementById('theme-toggle');
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    if (currentTheme === 'dark') document.body.classList.add('dark');
-    themeToggle.textContent = currentTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
-
+    // Theme system
+    const themeToggle = document.getElementById("theme-toggle");
+    const currentTheme = localStorage.getItem("theme") || "light";
+    if (currentTheme === "dark") document.body.classList.add("dark");
+    themeToggle.textContent = currentTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
     themeToggle.onclick = () => {
-      document.body.classList.toggle('dark');
-      const theme = document.body.classList.contains('dark') ? 'dark' : 'light';
-      localStorage.setItem('theme', theme);
-      themeToggle.textContent = theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+      document.body.classList.toggle("dark");
+      const newTheme = document.body.classList.contains("dark") ? "dark" : "light";
+      localStorage.setItem("theme", newTheme);
+      themeToggle.textContent = newTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
     };
 
-    // Set journal date
+    // Journal date display
     const params = new URLSearchParams(window.location.search);
     const date = params.get("date");
     if (date) document.getElementById("journal-date").textContent = date;
 
-    // Trade table logic
+    // Trade Table Logic
     const addTradeBtn = document.getElementById("add-trade");
     const tradeTable = document.getElementById("trade-table").querySelector("tbody");
     addTradeBtn.addEventListener("click", () => addTradeRow());
@@ -228,7 +251,7 @@
         <td><input type="text" placeholder="e.g. EUR/USD"></td>
         <td><input type="text" placeholder="Entry price"></td>
         <td><input type="text" placeholder="Exit price"></td>
-        <td><input type="text" placeholder="e.g. 1:2"></td>
+        <td><input type="text" placeholder="1:2"></td>
         <td><textarea placeholder="Setup notes..."></textarea></td>
         <td><input type="text" placeholder="+50 / -20"></td>
         <td>
@@ -238,11 +261,10 @@
       tradeTable.appendChild(row);
     }
 
-    // Image preview + modal
+    // Image Modal
     const modal = document.getElementById("img-modal");
     const modalImg = document.getElementById("modal-img");
     const closeModal = document.querySelector(".close-modal");
-
     window.previewImage = (event, input) => {
       const file = event.target.files[0];
       if (file) {
@@ -259,13 +281,40 @@
         reader.readAsDataURL(file);
       }
     };
+    closeModal.onclick = () => modal.style.display = "none";
+    window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
 
-    closeModal.onclick = () => {
-      modal.style.display = "none";
-    };
-    window.onclick = e => {
-      if (e.target === modal) modal.style.display = "none";
-    };
+    // Word Count
+    const reflection = document.getElementById("reflection");
+    const wordCount = document.getElementById("word-count");
+    reflection.addEventListener("input", () => {
+      const words = reflection.value.trim().split(/\s+/).filter(Boolean);
+      wordCount.textContent = "Words: " + words.length;
+    });
+
+    // Save button (local storage)
+    const saveBtn = document.getElementById("save-btn");
+    saveBtn.addEventListener("click", () => {
+      const data = {
+        mood: document.getElementById("mood").value,
+        goals: document.getElementById("goals").value,
+        reflection: document.getElementById("reflection").value,
+        gratitude: document.getElementById("gratitude").value,
+        date: date
+      };
+      localStorage.setItem(`journal_${date}`, JSON.stringify(data));
+      alert("✅ Journal saved successfully!");
+    });
+
+    // Load saved entry
+    const saved = localStorage.getItem(`journal_${date}`);
+    if (saved) {
+      const data = JSON.parse(saved);
+      document.getElementById("mood").value = data.mood || "";
+      document.getElementById("goals").value = data.goals || "";
+      document.getElementById("reflection").value = data.reflection || "";
+      document.getElementById("gratitude").value = data.gratitude || "";
+    }
   </script>
 </body>
 </html>
