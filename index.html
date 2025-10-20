@@ -1,59 +1,223 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>My Journal — Calendar</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Trading Journal Calendar</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2737/2737128.png">
+
+  <style>
+    :root {
+      --light-bg: #f8f9fa;
+      --light-text: #222;
+      --light-card: #ffffff;
+
+      --dark-bg: #121212;
+      --dark-text: #dddddd;
+      --dark-card: #1e1e1e;
+      --accent: #007bff;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.light {
+      background: var(--light-bg);
+      color: var(--light-text);
+    }
+
+    body.dark {
+      background: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+    }
+
+    #logo {
+      width: 80px;
+      display: block;
+      margin: 0 auto 10px auto;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    #theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #444;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #theme-toggle:hover {
+      background: #666;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      border-radius: 12px;
+      background: var(--light-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: background 0.3s;
+    }
+
+    body.dark main {
+      background: var(--dark-card);
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .day {
+      border: 1px solid #ccc;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+      background: var(--light-card);
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s, color 0.3s;
+    }
+
+    .day:hover {
+      transform: scale(1.05);
+      background: var(--accent);
+      color: white;
+    }
+
+    body.dark .day {
+      border-color: #555;
+      background: var(--dark-card);
+    }
+
+    body.dark .day:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    h2 {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .weekly-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .summary-box {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      background: var(--light-card);
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    body.dark .summary-box {
+      border-color: #555;
+      background: var(--dark-card);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.85rem;
+    }
+  </style>
 </head>
-<body>
-  <div class="topbar">
-    <div class="brand">🪶 My Journal</div>
-    <div class="controls">
-      <button id="theme-toggle">🌙</button>
-    </div>
-  </div>
 
-  <main class="container">
-    <header class="page-header">
-      <h1>Calendar</h1>
-      <p class="subtitle">Click any day to open the journal entry</p>
-    </header>
+<body class="light">
+  <button id="theme-toggle">🌙 Dark Mode</button>
 
-    <section class="calendar-card">
-      <div class="calendar-header">
-        <button id="prev-month" class="nav-btn">‹</button>
-        <h2 id="month-title"></h2>
-        <button id="next-month" class="nav-btn">›</button>
+  <header>
+    <img src="https://cdn-icons-png.flaticon.com/512/2737/2737128.png" alt="Bull Logo" id="logo">
+    <h1>📈 My Trading Journal Calendar</h1>
+    <p>Click a day to open your journal entry</p>
+  </header>
+
+  <main>
+    <!-- Calendar Grid -->
+    <div id="calendar" class="calendar"></div>
+
+    <!-- Weekly Summary Section -->
+    <h2>📊 Weekly Summary</h2>
+    <div class="weekly-summary">
+      <div class="summary-box">
+        <h3>Week 1</h3>
+        <textarea placeholder="Summary of Week 1..."></textarea>
       </div>
-      <div id="calendar-grid" class="calendar-grid"></div>
-    </section>
-
-    <section class="summary-card">
-      <h2>📆 Monthly — 4-Week Breakdown</h2>
-      <p class="small">This splits the current month into four ranges (1–7, 8–14, 15–21, 22+)</p>
-      <table id="four-week-summary">
-        <thead>
-          <tr>
-            <th>Week</th>
-            <th>Wins</th>
-            <th>Losses</th>
-            <th>Ongoing</th>
-            <th>Total PnL</th>
-            <th>Win Rate</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Week 1 (1–7)</td><td id="w1-wins">0</td><td id="w1-loss">0</td><td id="w1-ongoing">0</td><td id="w1-pnl">0.00</td><td id="w1-rate">0%</td></tr>
-          <tr><td>Week 2 (8–14)</td><td id="w2-wins">0</td><td id="w2-loss">0</td><td id="w2-ongoing">0</td><td id="w2-pnl">0.00</td><td id="w2-rate">0%</td></tr>
-          <tr><td>Week 3 (15–21)</td><td id="w3-wins">0</td><td id="w3-loss">0</td><td id="w3-ongoing">0</td><td id="w3-pnl">0.00</td><td id="w3-rate">0%</td></tr>
-          <tr><td>Week 4 (22+)</td><td id="w4-wins">0</td><td id="w4-loss">0</td><td id="w4-ongoing">0</td><td id="w4-pnl">0.00</td><td id="w4-rate">0%</td></tr>
-        </tbody>
-      </table>
-    </section>
+      <div class="summary-box">
+        <h3>Week 2</h3>
+        <textarea placeholder="Summary of Week 2..."></textarea>
+      </div>
+      <div class="summary-box">
+        <h3>Week 3</h3>
+        <textarea placeholder="Summary of Week 3..."></textarea>
+      </div>
+      <div class="summary-box">
+        <h3>Week 4</h3>
+        <textarea placeholder="Summary of Week 4..."></textarea>
+      </div>
+    </div>
   </main>
 
-  <script src="script.js"></script>
+  <footer>
+    <p>Made with ❤️ by Eyob | Bull Journal 2025</p>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById("theme-toggle");
+    const body = document.body;
+
+    // Theme toggle
+    themeToggle.addEventListener("click", () => {
+      body.classList.toggle("dark");
+      body.classList.toggle("light");
+      themeToggle.textContent = body.classList.contains("dark") ? "☀️ Light Mode" : "🌙 Dark Mode";
+    });
+
+    // Generate calendar days for current month
+    const calendar = document.getElementById("calendar");
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day);
+      const dayDiv = document.createElement("div");
+      dayDiv.className = "day";
+      dayDiv.textContent = day;
+
+      // Link to day.html
+      dayDiv.addEventListener("click", () => {
+        window.location.href = `day.html?date=${date.toDateString()}`;
+      });
+
+      calendar.appendChild(dayDiv);
+    }
+  </script>
 </body>
 </html>
-<!-- test rebuild -->
+
