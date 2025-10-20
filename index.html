@@ -11,7 +11,6 @@
       --light-bg: #f8f9fa;
       --light-text: #222;
       --light-card: #ffffff;
-
       --dark-bg: #121212;
       --dark-text: #dddddd;
       --dark-card: #1e1e1e;
@@ -119,47 +118,26 @@
       text-align: center;
     }
 
-    .weekly-summary {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .summary-box {
-      border: 1px solid #ccc;
+    textarea {
+      width: 100%;
+      min-height: 100px;
       border-radius: 8px;
-      padding: 15px;
-      background: var(--light-card);
-      transition: background 0.3s, border-color 0.3s;
+      border: 1px solid #ccc;
+      padding: 10px;
+      font-size: 1rem;
+      resize: vertical;
     }
 
-    body.dark .summary-box {
-      border-color: #555;
-      background: var(--dark-card);
+    body.dark textarea {
+      background: #2a2a2a;
+      color: #eee;
+      border: 1px solid #666;
     }
 
     footer {
       text-align: center;
       margin-top: 40px;
       font-size: 0.85rem;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 80px;
-      resize: vertical;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      padding: 8px;
-      font-size: 0.95rem;
-      transition: 0.3s;
-    }
-
-    body.dark textarea {
-      background: #2a2a2a;
-      border: 1px solid #666;
-      color: #eee;
     }
   </style>
 </head>
@@ -177,26 +155,9 @@
     <!-- Calendar Grid -->
     <div id="calendar" class="calendar"></div>
 
-    <!-- Weekly Summary Section -->
-    <h2>📊 Weekly Summary</h2>
-    <div class="weekly-summary">
-      <div class="summary-box">
-        <h3>Week 1</h3>
-        <textarea placeholder="Summary of Week 1..."></textarea>
-      </div>
-      <div class="summary-box">
-        <h3>Week 2</h3>
-        <textarea placeholder="Summary of Week 2..."></textarea>
-      </div>
-      <div class="summary-box">
-        <h3>Week 3</h3>
-        <textarea placeholder="Summary of Week 3..."></textarea>
-      </div>
-      <div class="summary-box">
-        <h3>Week 4</h3>
-        <textarea placeholder="Summary of Week 4..."></textarea>
-      </div>
-    </div>
+    <!-- Monthly Summary Section -->
+    <h2>📅 Monthly Summary</h2>
+    <textarea id="monthly-summary" placeholder="Write your overall thoughts, improvements, or insights for this month..."></textarea>
   </main>
 
   <footer>
@@ -207,7 +168,7 @@
     const themeToggle = document.getElementById("theme-toggle");
     const body = document.body;
 
-    // 🔹 Load saved theme preference
+    // Load saved theme
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
       body.classList.add(savedTheme);
@@ -216,7 +177,7 @@
       body.classList.add("light");
     }
 
-    // 🔹 Toggle theme + save preference
+    // Toggle theme
     themeToggle.addEventListener("click", () => {
       const newTheme = body.classList.contains("dark") ? "light" : "dark";
       body.className = newTheme;
@@ -224,7 +185,7 @@
       themeToggle.textContent = newTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
     });
 
-    // 🔹 Generate current month calendar
+    // Generate current month calendar
     const calendar = document.getElementById("calendar");
     const today = new Date();
     const year = today.getFullYear();
@@ -243,7 +204,18 @@
 
       calendar.appendChild(dayDiv);
     }
+
+    // Save monthly summary locally
+    const summaryBox = document.getElementById("monthly-summary");
+    const key = `monthly-summary-${month + 1}-${year}`;
+
+    // Load saved content
+    summaryBox.value = localStorage.getItem(key) || "";
+
+    // Save on change
+    summaryBox.addEventListener("input", () => {
+      localStorage.setItem(key, summaryBox.value);
+    });
   </script>
 </body>
 </html>
-
