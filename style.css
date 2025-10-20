@@ -105,3 +105,9 @@ body{
 @media (max-width:520px){
   .calendar-grid{grid-template-columns:repeat(2,1fr)}
 }
+#logo {
+  display: block;
+  width: 80px;
+  margin: 0 auto 10px auto;
+}
+
