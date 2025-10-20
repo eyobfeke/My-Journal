@@ -3,17 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Trading Journal</title>
-
-  <!-- ✅ Bull Icon for the Tab -->
+  <title>Trade Journal Entry</title>
   <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2737/2737128.png">
 
   <style>
-    /* === GLOBAL STYLES === */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
+      padding: 20px;
       transition: background 0.3s, color 0.3s;
     }
 
@@ -23,309 +20,178 @@
     }
 
     body.dark {
-      background: #1e1e1e;
+      background: #121212;
       color: #ddd;
     }
 
-    main {
-      max-width: 1200px;
-      margin: 40px auto;
-      background: var(--card-bg, #fff);
-      padding: 30px;
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      background: #fff;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s;
+    }
+
+    body.dark .container {
+      background: #1e1e1e;
     }
 
     h1 {
       text-align: center;
     }
 
-    .back-link {
-      display: block;
-      text-align: center;
-      margin-bottom: 15px;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    /* === LOGO === */
-    #logo {
-      display: block;
-      width: 80px;
-      margin: 0 auto 10px auto;
-    }
-
-    /* === THEME TOGGLE === */
-    #theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #444;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    #theme-toggle:hover {
-      background: #666;
-    }
-
-    /* === TABLES === */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 15px;
+      margin-top: 20px;
     }
 
     th, td {
+      padding: 10px;
       border: 1px solid #ccc;
-      padding: 8px;
       text-align: center;
     }
 
-    th {
-      background-color: #f3f4f6;
+    body.dark th, body.dark td {
+      border-color: #555;
     }
 
-    /* === BUTTON === */
-    .add-btn {
+    input, textarea {
+      width: 95%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: inherit;
+      color: inherit;
+    }
+
+    body.dark input, body.dark textarea {
+      border: 1px solid #666;
+      background: #2a2a2a;
+      color: #eee;
+    }
+
+    #add-trade {
+      margin-top: 15px;
+      padding: 10px 16px;
+      border: none;
       background: #007bff;
       color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
     }
 
-    .add-btn:hover {
+    #add-trade:hover {
       background: #0056b3;
     }
 
-    /* === CARD CONTAINERS === */
-    .card {
-      background: var(--card-bg, #fff);
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 20px;
-    }
-
-    textarea, input {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 0.85rem;
-    }
-
-    /* === IMAGE PREVIEW === */
-    .img-preview {
-      margin-top: 8px;
-      text-align: center;
-    }
-
-    .preview-thumb {
-      max-width: 80px;
-      max-height: 80px;
-      border-radius: 6px;
+    .image-preview {
+      width: 100px;
+      height: auto;
       cursor: pointer;
-      transition: transform 0.2s;
+      border-radius: 8px;
     }
 
-    .preview-thumb:hover {
-      transform: scale(1.05);
+    .enlarged {
+      width: 100%;
+      max-width: 800px;
+      display: block;
+      margin: 20px auto;
+      border-radius: 12px;
     }
 
-    /* === DARK THEME ADJUSTMENTS === */
-    body.dark .card {
-      background: #2b2b2b;
-      border-color: #555;
+    #summary {
+      margin-top: 30px;
+      width: 100%;
+      min-height: 120px;
     }
 
-    body.dark th {
-      background-color: #333;
+    a.back {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #007bff;
+      text-decoration: none;
     }
 
-    body.dark table, body.dark textarea, body.dark input {
-      background: #2e2e2e;
-      color: #ddd;
-      border-color: #555;
+    a.back:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 
 <body>
-  <!-- ✅ THEME TOGGLE BUTTON -->
-  <button id="theme-toggle">🌙 Dark Mode</button>
+  <div class="container">
+    <a href="index.html" class="back">← Back to Calendar</a>
+    <h1 id="date-title"></h1>
 
-  <main>
-    <!-- ✅ BULL LOGO -->
-    <img src="https://cdn-icons-png.flaticon.com/512/2737/2737128.png" alt="Bull Logo" id="logo">
+    <table id="trade-table">
+      <tr>
+        <th>Pair</th>
+        <th>Entry</th>
+        <th>Exit</th>
+        <th>R:R</th>
+        <th>PNL</th>
+        <th>Notes</th>
+        <th>Image</th>
+      </tr>
+    </table>
 
-    <h1>Journal for <span id="journal-date"></span></h1>
-    <a class="back-link" href="index.html">← Back to Calendar</a>
+    <button id="add-trade">+ Add Trade</button>
 
-    <!-- === TRADE SECTION === -->
-    <div class="card">
-      <h2>📊 Trade Details</h2>
-      <table id="trade-table">
-        <thead>
-          <tr>
-            <th>Pair</th>
-            <th>Entry</th>
-            <th>Exit</th>
-            <th>R/R</th>
-            <th>Setup Notes</th>
-            <th>Screenshot</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><input type="text" placeholder="EUR/USD"></td>
-            <td><input type="text" placeholder="Entry Price"></td>
-            <td><input type="text" placeholder="Exit Price"></td>
-            <td><input type="text" placeholder="1:2, 1:3, etc."></td>
-            <td><textarea placeholder="Why I took this trade..."></textarea></td>
-            <td>
-              <input type="file" accept="image/*" onchange="previewImage(this)">
-              <div class="img-preview"></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button class="add-btn" onclick="addTrade()">+ Add Trade</button>
-    </div>
-
-    <!-- === WEEKLY SUMMARY === -->
-    <div class="card">
-      <h2>📅 Weekly Summary</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Week</th>
-            <th>Wins</th>
-            <th>Losses</th>
-            <th>PNL</th>
-            <th>Win Rate</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Week 1</td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><td>Week 2</td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><td>Week 3</td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><td>Week 4</td><td></td><td></td><td></td><td></td><td></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- === JOURNAL SECTIONS === -->
-    <div class="grid">
-      <div class="card">
-        <h2>📝 Daily Reflection</h2>
-        <textarea placeholder="Write your reflections for the day..."></textarea>
-      </div>
-
-      <div class="card">
-        <h2>🙏 Gratitude</h2>
-        <textarea placeholder="List things you’re grateful for..."></textarea>
-      </div>
-
-      <div class="card">
-        <h2>🎯 Tomorrow’s Goals</h2>
-        <textarea placeholder="What do you want to improve tomorrow?"></textarea>
-      </div>
-
-      <div class="card">
-        <h2>🌤️ Mood Tracker</h2>
-        <label><input type="radio" name="mood"> Happy</label><br>
-        <label><input type="radio" name="mood"> Neutral</label><br>
-        <label><input type="radio" name="mood"> Sad</label><br>
-        <label><input type="radio" name="mood"> Stressed</label><br>
-        <label><input type="radio" name="mood"> Confident</label>
-      </div>
-    </div>
-
-    <footer>Made with ❤️ using GitHub Pages</footer>
-  </main>
+    <h2>📝 Daily Summary</h2>
+    <textarea id="summary" placeholder="Reflect on today's trades, lessons learned, mindset, etc..."></textarea>
+  </div>
 
   <script>
-    // === APPLY SAVED THEME ON LOAD ===
-    const savedTheme = localStorage.getItem("theme") || "light";
-    document.body.classList.add(savedTheme);
+    // Theme persistence
+    const savedTheme = localStorage.getItem("theme");
+    document.body.classList.add(savedTheme || "light");
 
-    const themeToggle = document.getElementById("theme-toggle");
-    themeToggle.textContent = savedTheme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode";
-
-    themeToggle.addEventListener("click", () => {
-      const newTheme = document.body.classList.contains("light") ? "dark" : "light";
-      document.body.classList.remove("light", "dark");
-      document.body.classList.add(newTheme);
-      themeToggle.textContent = newTheme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode";
-      localStorage.setItem("theme", newTheme);
-    });
-
-    // === DISPLAY CURRENT DATE ===
+    // Show date in title
     const params = new URLSearchParams(window.location.search);
-    const date = params.get("date") || "Unknown Date";
-    document.getElementById("journal-date").textContent = date;
+    const date = params.get("date");
+    document.getElementById("date-title").textContent = date || "Trade Journal Entry";
 
-    // === ADD TRADE ROW ===
-    function addTrade() {
-      const table = document.querySelector("#trade-table tbody");
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td><input type="text" placeholder="EUR/USD"></td>
-        <td><input type="text" placeholder="Entry Price"></td>
-        <td><input type="text" placeholder="Exit Price"></td>
-        <td><input type="text" placeholder="1:2, 1:3, etc."></td>
-        <td><textarea placeholder="Why I took this trade..."></textarea></td>
-        <td>
-          <input type="file" accept="image/*" onchange="previewImage(this)">
-          <div class="img-preview"></div>
-        </td>
-      `;
-      table.appendChild(row);
-    }
+    const table = document.getElementById("trade-table");
 
-    // === IMAGE PREVIEW FUNCTION ===
-    function previewImage(input) {
-      const preview = input.nextElementSibling;
-      preview.innerHTML = ""; // Clear previous image to avoid duplicates
-
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          img.alt = "Screenshot Preview";
-          img.classList.add("preview-thumb");
-
-          // Click image to open in new tab
-          img.addEventListener("click", () => {
-            const newTab = window.open();
-            newTab.document.write(`<img src="${e.target.result}" style="max-width:100%">`);
+    document.getElementById("add-trade").addEventListener("click", () => {
+      const row = table.insertRow(-1);
+      ["pair", "entry", "exit", "rr", "pnl", "notes", "image"].forEach((field, i) => {
+        const cell = row.insertCell(i);
+        if (field === "image") {
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = "image/*";
+          input.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+              const img = document.createElement("img");
+              img.src = reader.result;
+              img.className = "image-preview";
+              img.onclick = () => {
+                const enlarged = document.querySelector(".enlarged");
+                if (enlarged) enlarged.remove();
+                const bigImg = img.cloneNode();
+                bigImg.className = "enlarged";
+                document.body.appendChild(bigImg);
+                bigImg.onclick = () => bigImg.remove();
+              };
+              cell.appendChild(img);
+            };
+            reader.readAsDataURL(file);
           });
-
-          preview.appendChild(img);
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
+          cell.appendChild(input);
+        } else {
+          const input = document.createElement(field === "notes" ? "textarea" : "input");
+          cell.appendChild(input);
+        }
+      });
+    });
   </script>
 </body>
 </html>
+
