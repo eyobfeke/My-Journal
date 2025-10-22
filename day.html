@@ -4,11 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Daily Journal</title>
-  <!-- keep your existing stylesheet if any -->
   <link rel="stylesheet" href="../style.css" />
   <style>
-    /* Minimal styling for the restored sections.
-       This deliberately does not override site-level theme classes. */
     :root {
       --accent: #007bff;
       --card-bg: #ffffff;
@@ -16,86 +13,64 @@
     }
 
     body {
-      font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
+      font-family: "Segoe UI", system-ui, sans-serif;
       margin: 0;
       padding: 0;
-      background: transparent; /* let global theme handle background */
-      color: inherit; /* keep theme's color */
+      background: transparent;
+      color: inherit;
     }
 
     header {
-      padding: 18px 12px;
       text-align: center;
+      padding: 16px;
       border-bottom: 1px solid rgba(0,0,0,0.06);
-      background: transparent;
-    }
-
-    header h1 {
-      margin: 0 0 6px 0;
-      font-size: 18px;
-      font-weight: 600;
     }
 
     header a.back {
       display: inline-block;
-      margin-top: 6px;
       color: var(--accent);
       text-decoration: none;
       font-weight: 600;
+      margin-top: 5px;
     }
 
     main.container {
       max-width: 980px;
-      margin: 18px auto;
-      padding: 18px;
+      margin: 20px auto;
+      padding: 20px;
       background: var(--card-bg);
       border-radius: 10px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.06);
     }
 
-    /* --- Keep trade table style untouched visually (simple neutral) --- */
     #trade-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
+
     #trade-table th, #trade-table td {
       border: 1px solid rgba(0,0,0,0.12);
       padding: 8px;
       text-align: center;
     }
+
     #trade-table th {
       background: rgba(0,0,0,0.03);
       font-weight: 700;
     }
 
     .btn {
-      display: inline-block;
       padding: 8px 12px;
       background: var(--accent);
       color: #fff;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      font-weight: 700;
-    }
-    .btn.ghost {
-      background: transparent;
-      color: var(--accent);
-      border: 1px solid rgba(0,0,0,0.08);
+      font-weight: 600;
     }
 
-    section {
-      margin-bottom: 16px;
-    }
-
-    h2.section-title {
-      margin: 6px 0 10px 0;
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    textarea, input[type="text"], select {
+    textarea, input[type="text"] {
       width: 100%;
       box-sizing: border-box;
       padding: 10px;
@@ -103,28 +78,18 @@
       border: 1px solid rgba(0,0,0,0.12);
       font-family: inherit;
       font-size: 14px;
-      color: inherit;
       background: #fff;
-    }
-
-    /* don't override dark theme backgrounds if body.dark exists
-       just make textarea subtle; theme will override if present */
-    body.dark textarea, body.dark input[type="text"] {
-      background: #222;
-      border-color: rgba(255,255,255,0.06);
-      color: #eaeaea;
+      color: inherit;
     }
 
     textarea { min-height: 110px; resize: vertical; }
 
-    .small-meta {
-      font-size: 13px;
-      color: var(--muted);
-      text-align: right;
-      margin-top: 6px;
+    body.dark textarea, body.dark input[type="text"] {
+      background: #222;
+      color: #eaeaea;
+      border-color: rgba(255,255,255,0.1);
     }
 
-    /* screenshot preview */
     .screenshot-preview {
       display: block;
       max-width: 140px;
@@ -136,7 +101,6 @@
       border: 1px solid rgba(0,0,0,0.08);
     }
 
-    /* modal enlarge */
     .modal {
       display: none;
       position: fixed;
@@ -147,11 +111,28 @@
       justify-content: center;
       padding: 20px;
     }
-    .modal img { max-width: 95%; max-height: 95%; border-radius: 8px; }
 
-    @media (max-width:720px) {
+    .modal img {
+      max-width: 95%;
+      max-height: 95%;
+      border-radius: 8px;
+    }
+
+    .small-meta {
+      text-align: right;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    section { margin-bottom: 20px; }
+
+    h2.section-title {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width:720px){
       main.container { margin: 12px; padding: 12px; }
-      .screenshot-preview { max-width: 120px; }
     }
   </style>
 </head>
@@ -162,11 +143,10 @@
   </header>
 
   <main class="container">
-    <!-- TRADE DETAIL TABLE (kept intact) -->
+    <!-- Trade Detail Table -->
     <section id="trade-section">
       <button id="add-trade" class="btn">Add Trade</button>
-
-      <table id="trade-table" aria-label="Trade details">
+      <table id="trade-table">
         <thead>
           <tr>
             <th>Pair</th>
@@ -178,43 +158,23 @@
             <th>Screenshot</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- initial empty row preserved to match your existing layout -->
-          <tr>
-            <td><input type="text" class="pair" placeholder="e.g. EUR/USD"></td>
-            <td><input type="text" class="entry" placeholder="Entry price"></td>
-            <td><input type="text" class="exit" placeholder="Exit price"></td>
-            <td><input type="text" class="rr" placeholder="e.g. 1:2"></td>
-            <td><textarea class="notes" placeholder="Setup notes..."></textarea></td>
-            <td><input type="text" class="pnl" placeholder="+50 / -20"></td>
-            <td>
-              <input type="file" accept="image/*" class="screenshot-input">
-              <img class="screenshot-preview" style="display:none" alt="screenshot preview">
-            </td>
-          </tr>
-        </tbody>
+        <tbody></tbody>
       </table>
     </section>
 
-    <!-- RESTORED DAILY SECTIONS (exactly as you requested) -->
+    <!-- Daily Journal Sections -->
     <section id="daily-summary">
       <h2 class="section-title">Daily Summary</h2>
-      <textarea id="dailySummary" placeholder="Summarize your overall performance today..."></textarea>
+      <textarea id="dailySummary" placeholder="Automatically filled summary of today’s trades..."></textarea>
     </section>
 
     <section id="mood-section">
       <h2 class="section-title">Mood Tracker</h2>
-      <div>
-        <label><input type="radio" name="mood" value="Happy"> Happy</label>
-        &nbsp;&nbsp;
-        <label><input type="radio" name="mood" value="Neutral"> Neutral</label>
-        &nbsp;&nbsp;
-        <label><input type="radio" name="mood" value="Sad"> Sad</label>
-        &nbsp;&nbsp;
-        <label><input type="radio" name="mood" value="Stressed"> Stressed</label>
-        &nbsp;&nbsp;
-        <label><input type="radio" name="mood" value="Confident"> Confident</label>
-      </div>
+      <label><input type="radio" name="mood" value="Happy"> Happy</label>
+      <label><input type="radio" name="mood" value="Neutral"> Neutral</label>
+      <label><input type="radio" name="mood" value="Sad"> Sad</label>
+      <label><input type="radio" name="mood" value="Stressed"> Stressed</label>
+      <label><input type="radio" name="mood" value="Confident"> Confident</label>
     </section>
 
     <section id="reflection-section">
@@ -230,193 +190,136 @@
 
     <section id="goals-section">
       <h2 class="section-title">Daily Goals</h2>
-      <textarea id="goals" placeholder="What are your main goals today?"></textarea>
+      <textarea id="goals" placeholder="What are your goals for tomorrow?"></textarea>
     </section>
 
-    <section id="save-section">
-      <button id="saveEntry" class="btn">💾 Save Entry</button>
-    </section>
+    <button id="saveEntry" class="btn">💾 Save Entry</button>
   </main>
 
-  <!-- modal for image enlarge -->
-  <div id="imgModal" class="modal" aria-hidden="true">
-    <img id="modalImg" alt="enlarged screenshot">
-  </div>
+  <div id="imgModal" class="modal"><img id="modalImg" alt=""></div>
 
   <script>
-    // ===== Utilities & DOM references =====
     const params = new URLSearchParams(window.location.search);
-    const date = params.get('date') || (new Date()).toISOString().slice(0,10);
-    document.getElementById('entry-date').textContent = date ? `Journal for ${date}` : 'Journal Entry';
-
-    const TRADE_TBODY = document.querySelector('#trade-table tbody');
-    const ADD_TRADE_BTN = document.getElementById('add-trade');
-
-    const dailySummaryEl = document.getElementById('dailySummary');
-    const reflectionEl = document.getElementById('reflection');
-    const gratitudeEl = document.getElementById('gratitude');
-    const goalsEl = document.getElementById('goals');
-    const wordCountEl = document.getElementById('wordCount');
-
-    const saveBtn = document.getElementById('saveEntry');
-
-    const IMG_MODAL = document.getElementById('imgModal');
-    const MODAL_IMG = document.getElementById('modalImg');
-
+    const date = params.get('date') || new Date().toISOString().slice(0,10);
+    document.getElementById('entry-date').textContent = `Journal for ${date}`;
     const STORAGE_KEY = `entry-${date}`;
 
-    // ===== Word count for reflection =====
-    function updateWordCount() {
-      const words = reflectionEl.value.trim().split(/\s+/).filter(Boolean);
-      wordCountEl.textContent = `Words: ${words.length}`;
-    }
-    reflectionEl.addEventListener('input', updateWordCount);
+    const tbody = document.querySelector("#trade-table tbody");
+    const addTradeBtn = document.getElementById("add-trade");
+    const saveBtn = document.getElementById("saveEntry");
+    const summaryEl = document.getElementById("dailySummary");
+    const reflectionEl = document.getElementById("reflection");
+    const gratitudeEl = document.getElementById("gratitude");
+    const goalsEl = document.getElementById("goals");
+    const wordCountEl = document.getElementById("wordCount");
 
-    // ===== Add trade row (keeps structure untouched) =====
+    const modal = document.getElementById("imgModal");
+    const modalImg = document.getElementById("modalImg");
+
+    addTradeBtn.onclick = () => createTradeRow();
+
     function createTradeRow(data = {}) {
-      const tr = document.createElement('tr');
+      const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td><input type="text" class="pair" placeholder="e.g. EUR/USD" value="${escapeHtml(data.pair||'')}"></td>
-        <td><input type="text" class="entry" placeholder="Entry price" value="${escapeHtml(data.entry||'')}"></td>
-        <td><input type="text" class="exit" placeholder="Exit price" value="${escapeHtml(data.exit||'')}"></td>
-        <td><input type="text" class="rr" placeholder="e.g. 1:2" value="${escapeHtml(data.rr||'')}"></td>
-        <td><textarea class="notes" placeholder="Setup notes...">${escapeHtml(data.notes||'')}</textarea></td>
-        <td><input type="text" class="pnl" placeholder="+50 / -20" value="${escapeHtml(data.pnl||'')}"></td>
+        <td><input class="pair" value="${data.pair||''}" placeholder="Pair"></td>
+        <td><input class="entry" value="${data.entry||''}" placeholder="Entry"></td>
+        <td><input class="exit" value="${data.exit||''}" placeholder="Exit"></td>
+        <td><input class="rr" value="${data.rr||''}" placeholder="R:R"></td>
+        <td><textarea class="notes" placeholder="Notes...">${data.notes||''}</textarea></td>
+        <td><input class="pnl" value="${data.pnl||''}" placeholder="+50/-20"></td>
         <td>
-          <input type="file" accept="image/*" class="screenshot-input">
-          <img class="screenshot-preview" style="display:${data.screenshot ? 'block' : 'none'}" src="${data.screenshot||''}" alt="screenshot preview">
-        </td>
-      `;
-      // wire up screenshot input change
-      const input = tr.querySelector('.screenshot-input');
-      const img = tr.querySelector('.screenshot-preview');
-      input.addEventListener('change', (ev) => {
-        const f = ev.target.files && ev.target.files[0];
-        if (!f) return;
+          <input type="file" accept="image/*" class="shot">
+          <img src="${data.screenshot||''}" class="screenshot-preview" style="display:${data.screenshot?'block':'none'}">
+        </td>`;
+      const shot = tr.querySelector(".shot");
+      const img = tr.querySelector(".screenshot-preview");
+      shot.onchange = e => {
+        const f = e.target.files[0];
+        if(!f) return;
         const reader = new FileReader();
-        reader.onload = (e) => {
-          img.src = e.target.result;
-          img.style.display = 'block';
-          img.dataset.base64 = e.target.result; // store base64 on img for saving
-          img.addEventListener('click', () => openModal(e.target.result));
+        reader.onload = ev => {
+          img.src = ev.target.result;
+          img.style.display = "block";
+          img.dataset.base64 = ev.target.result;
         };
         reader.readAsDataURL(f);
-      });
-      // if an existing screenshot was provided, add click to open
-      if (data.screenshot) {
-        img.addEventListener('click', () => openModal(data.screenshot));
-        img.dataset.base64 = data.screenshot;
-      }
-      TRADE_TBODY.appendChild(tr);
-    }
-
-    // escape minimal to avoid breaking attributes
-    function escapeHtml(s) {
-      return String(s).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;');
-    }
-
-    // add initial row if none exist
-    if (!TRADE_TBODY.querySelector('tr')) {
-      createTradeRow();
-    }
-
-    ADD_TRADE_BTN.addEventListener('click', () => createTradeRow());
-
-    // ===== Modal functions =====
-    function openModal(src) {
-      MODAL_IMG.src = src;
-      IMG_MODAL.style.display = 'flex';
-      IMG_MODAL.setAttribute('aria-hidden', 'false');
-    }
-    IMG_MODAL.addEventListener('click', () => {
-      IMG_MODAL.style.display = 'none';
-      IMG_MODAL.setAttribute('aria-hidden', 'true');
-      MODAL_IMG.src = '';
-    });
-
-    // ===== Save & Load logic (localStorage) =====
-    function gatherData() {
-      const trades = Array.from(TRADE_TBODY.querySelectorAll('tr')).map(tr => {
-        const pair = tr.querySelector('.pair')?.value || '';
-        const entry = tr.querySelector('.entry')?.value || '';
-        const exit = tr.querySelector('.exit')?.value || '';
-        const rr = tr.querySelector('.rr')?.value || '';
-        const notes = tr.querySelector('.notes')?.value || '';
-        const pnl = tr.querySelector('.pnl')?.value || '';
-        // prefer attached preview base64 if present
-        const imgEl = tr.querySelector('.screenshot-preview');
-        const screenshot = imgEl?.dataset?.base64 || imgEl?.src || '';
-        return { pair, entry, exit, rr, notes, pnl, screenshot };
-      });
-
-      const mood = document.querySelector('input[name="mood"]:checked')?.value || '';
-      return {
-        date,
-        mood,
-        dailySummary: dailySummaryEl.value || '',
-        reflection: reflectionEl.value || '',
-        gratitude: gratitudeEl.value || '',
-        goals: goalsEl.value || '',
-        trades
       };
+      img.onclick = () => openModal(img.src);
+      tbody.appendChild(tr);
     }
 
-    function saveEntry() {
-      try {
-        const data = gatherData();
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        alert('✅ Entry saved locally');
-      } catch (err) {
-        console.error(err);
-        alert('❌ Save failed');
+    function openModal(src){
+      modalImg.src = src;
+      modal.style.display="flex";
+    }
+    modal.onclick = ()=> modal.style.display="none";
+
+    function getTrades(){
+      return [...tbody.querySelectorAll("tr")].map(tr=>{
+        const get=(s)=>tr.querySelector(s)?.value||"";
+        const img=tr.querySelector(".screenshot-preview");
+        return {
+          pair:get(".pair"), entry:get(".entry"), exit:get(".exit"),
+          rr:get(".rr"), notes:get(".notes"), pnl:get(".pnl"),
+          screenshot:img?.dataset.base64||img?.src||""
+        };
+      });
+    }
+
+    function autoSummary(trades){
+      if(!trades.length) return "No trades recorded today.";
+      let totalPNL=0, rrSum=0, rrCount=0;
+      let list=[];
+      for(const t of trades){
+        const n=parseFloat(t.pnl)||0;
+        totalPNL+=n;
+        const r=parseFloat(t.rr?.split(':')[1])||0;
+        if(r>0){rrSum+=r; rrCount++;}
+        list.push(t.pair);
       }
+      const avgRR=rrCount?(rrSum/rrCount).toFixed(2):"N/A";
+      return `Trades Taken: ${trades.length}\nPairs: ${list.join(", ")}\nTotal PnL: ${totalPNL}\nAverage R:R: ${avgRR}\nGreat work—review setups and stay consistent!`;
     }
 
-    function loadEntry() {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      try {
-        const data = JSON.parse(raw);
-        dailySummaryEl.value = data.dailySummary || '';
-        reflectionEl.value = data.reflection || '';
-        gratitudeEl.value = data.gratitude || '';
-        goalsEl.value = data.goals || '';
-        // set mood radio
-        if (data.mood) {
-          const m = document.querySelector(`input[name="mood"][value="${CSS.escape(data.mood)}"]`);
-          if (m) m.checked = true;
-          else { // if value contains spaces or different label, fallback
-            Array.from(document.querySelectorAll('input[name="mood"]')).forEach(r => {
-              if (r.value.toLowerCase() === (data.mood||'').toLowerCase()) r.checked = true;
-            });
-          }
-        }
-        // trades: clear current rows and re-create from saved
-        TRADE_TBODY.innerHTML = '';
-        (data.trades||[]).forEach(t => createTradeRow(t));
-        // if no trades in saved, make one empty
-        if (!(data.trades && data.trades.length)) createTradeRow();
-        updateWordCount();
-      } catch (err) {
-        console.error('load error', err);
+    saveBtn.onclick = ()=>{
+      const trades=getTrades();
+      summaryEl.value = autoSummary(trades);
+      const data={
+        trades,
+        dailySummary: summaryEl.value,
+        reflection: reflectionEl.value,
+        gratitude: gratitudeEl.value,
+        goals: goalsEl.value,
+        mood: document.querySelector("input[name='mood']:checked")?.value||""
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      alert("✅ Entry saved with automatic summary!");
+    };
+
+    function load(){
+      const raw=localStorage.getItem(STORAGE_KEY);
+      if(!raw) return createTradeRow();
+      const data=JSON.parse(raw);
+      (data.trades||[]).forEach(t=>createTradeRow(t));
+      if(!data.trades?.length) createTradeRow();
+      summaryEl.value=data.dailySummary||"";
+      reflectionEl.value=data.reflection||"";
+      gratitudeEl.value=data.gratitude||"";
+      goalsEl.value=data.goals||"";
+      if(data.mood){
+        const m=document.querySelector(`input[value='${data.mood}']`);
+        if(m) m.checked=true;
       }
+      updateWords();
     }
 
-    saveBtn.addEventListener('click', saveEntry);
-
-    // update word count helper
-    function updateWordCount() {
-      const words = reflectionEl.value.trim().split(/\s+/).filter(Boolean);
-      wordCountEl.textContent = `Words: ${words.length}`;
+    function updateWords(){
+      const words=reflectionEl.value.trim().split(/\s+/).filter(Boolean);
+      wordCountEl.textContent=`Words: ${words.length}`;
     }
-    reflectionEl.addEventListener('input', updateWordCount);
 
-    // On load, populate saved entry
-    loadEntry();
-    updateWordCount();
-
-    // Make sure preview images are clickable if they exist (for entries loaded)
-    // (createTradeRow already wires click handlers when loading)
+    reflectionEl.addEventListener("input",updateWords);
+    load();
   </script>
 </body>
 </html>
