@@ -3,25 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daily Journal</title>
+  <title>My Daily Journal</title>
   <link rel="stylesheet" href="../style.css" />
   <style>
     body {
       font-family: "Segoe UI", sans-serif;
       margin: 0;
       padding: 0;
-      transition: background-color 0.3s, color 0.3s;
+      background-color: #121212;
+      color: #f5f5f5;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.light {
+      background-color: #fafafa;
+      color: #333;
     }
 
     header {
       text-align: center;
-      padding: 15px;
-      border-bottom: 1px solid #ccc;
+      padding: 20px;
+      background-color: #1e1e1e;
+      border-bottom: 1px solid #333;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 1.6rem;
+    body.light header {
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #ddd;
     }
 
     header a {
@@ -32,104 +40,90 @@
 
     main {
       max-width: 1100px;
-      margin: 20px auto;
+      margin: 30px auto;
       padding: 20px;
-      background-color: var(--card-bg, #fff);
+      background-color: #1e1e1e;
       border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+      transition: background 0.3s;
+    }
+
+    body.light main {
+      background-color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 30px;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: center;
-    }
-
-    th {
-      background-color: var(--table-header-bg, #f4f4f4);
-      font-weight: 600;
-    }
-
-    section {
       margin-bottom: 25px;
     }
 
-    h2 {
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 5px;
+    th, td {
+      border: 1px solid #333;
+      padding: 8px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    body.light th, body.light td {
+      border-color: #ddd;
+    }
+
+    th {
+      background-color: #2a2a2a;
+    }
+
+    body.light th {
+      background-color: #f2f2f2;
     }
 
     textarea {
       width: 100%;
-      height: 120px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
       padding: 10px;
-      resize: vertical;
-      box-sizing: border-box;
-    }
-
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 15px;
       border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s;
+      border: 1px solid #444;
+      background: #222;
+      color: white;
+      resize: none;
     }
 
-    button:hover {
-      background-color: #005fcc;
+    body.light textarea {
+      background: #fff;
+      color: #000;
+      border: 1px solid #ccc;
     }
 
     #save-entry {
       width: 100%;
-      margin-top: 20px;
+      padding: 15px;
       font-size: 1.1rem;
-      padding: 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
     }
 
-    .screenshot-preview {
-      max-width: 100%;
-      margin-top: 10px;
-      display: none;
+    #save-entry:hover {
+      background: #005fcc;
+    }
+
+    #theme-toggle {
+      float: right;
+      margin: 10px;
+      background: #444;
+      color: white;
+      border: none;
+      padding: 5px 10px;
       border-radius: 8px;
-      border: 1px solid #ccc;
+      cursor: pointer;
     }
 
-    /* Dark mode overrides */
-    body.dark {
-      background-color: #121212;
-      color: #ddd;
-    }
-
-    body.dark main {
-      background-color: #1e1e1e;
-    }
-
-    body.dark th {
-      background-color: #2c2c2c;
-    }
-
-    body.dark textarea {
-      background-color: #2a2a2a;
-      color: #ddd;
-      border-color: #555;
-    }
-
-    body.dark button {
-      background-color: #3399ff;
+    body.light #theme-toggle {
+      background: #ddd;
+      color: #000;
     }
   </style>
 </head>
@@ -137,136 +131,160 @@
   <header>
     <h1 id="entry-date">Loading...</h1>
     <a href="../index.html">← Back to Calendar</a>
+    <button id="theme-toggle">🌗 Toggle Theme</button>
   </header>
 
   <main>
-    <!-- Trade Details -->
-    <section id="trade-details">
-      <button id="add-trade">Add Trade</button>
-      <table id="trade-table">
-        <thead>
-          <tr>
-            <th>Pair</th>
-            <th>Entry</th>
-            <th>Exit</th>
-            <th>R:R</th>
-            <th>Notes</th>
-            <th>PNL</th>
-            <th>Screenshot</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><input type="text" placeholder="e.g. EUR/USD" /></td>
-            <td><input type="text" placeholder="Entry price" /></td>
-            <td><input type="text" placeholder="Exit price" /></td>
-            <td><input type="text" placeholder="e.g. 1:2" /></td>
-            <td><textarea placeholder="Setup notes..."></textarea></td>
-            <td><input type="text" placeholder="+50 / -20" /></td>
-            <td>
-              <input type="file" accept="image/*" class="screenshot-input" />
-              <img class="screenshot-preview" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- TRADE DETAIL TABLE -->
+    <table id="trade-table">
+      <thead>
+        <tr>
+          <th>Pair</th>
+          <th>Entry</th>
+          <th>Exit</th>
+          <th>R:R</th>
+          <th>Notes</th>
+          <th>PNL</th>
+          <th>Screenshot</th>
+        </tr>
+      </thead>
+      <tbody id="trade-body"></tbody>
+    </table>
+
+    <button id="add-trade">Add Trade</button>
+
+    <!-- DAILY SUMMARY TABLE -->
+    <h2>📊 Daily Summary</h2>
+    <table id="summary-table">
+      <thead>
+        <tr>
+          <th>Total Trades</th>
+          <th>Total PnL</th>
+          <th>Average R:R</th>
+          <th>Max Win</th>
+          <th>Max Loss</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="summary-row">
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- MOOD, REFLECTION, GRATITUDE, GOALS -->
+    <section id="mood">
+      <h2>🌤️ Mood Tracker</h2>
+      <label><input type="radio" name="mood" value="😊"> Happy</label>
+      <label><input type="radio" name="mood" value="😐"> Neutral</label>
+      <label><input type="radio" name="mood" value="😔"> Sad</label>
+      <label><input type="radio" name="mood" value="😤"> Stressed</label>
+      <label><input type="radio" name="mood" value="😎"> Confident</label>
     </section>
 
-    <!-- Daily Sections (Restored Like Before) -->
-    <section id="daily-summary">
-      <h2>📈 Daily Summary</h2>
-      <textarea placeholder="Summarize your overall performance today..."></textarea>
+    <section>
+      <h2>📝 Reflection</h2>
+      <textarea id="reflection" placeholder="Write your reflections for the day..."></textarea>
     </section>
 
-    <section id="emotions">
-      <h2>😌 Emotions</h2>
-      <textarea placeholder="How did you feel before, during, and after trading?"></textarea>
+    <section>
+      <h2>🙏 Gratitude List</h2>
+      <textarea id="gratitude" placeholder="List things you're grateful for today..."></textarea>
     </section>
 
-    <section id="market-conditions">
-      <h2>🌍 Market Conditions</h2>
-      <textarea placeholder="Describe the market trend, volatility, and any key news events..."></textarea>
-    </section>
-
-    <section id="mistakes">
-      <h2>⚠️ Mistakes & Lessons</h2>
-      <textarea placeholder="What mistakes did you make? What can you learn from them?"></textarea>
-    </section>
-
-    <section id="tomorrows-plan">
-      <h2>🎯 Tomorrow’s Plan</h2>
-      <textarea placeholder="What’s your strategy or focus for tomorrow?"></textarea>
-    </section>
-
-    <section id="mindset">
-      <h2>🧠 Mindset Notes</h2>
-      <textarea placeholder="Any final reflections or thoughts about your mindset today..."></textarea>
+    <section>
+      <h2>🎯 Daily Goals</h2>
+      <textarea id="goals" placeholder="Write your goals for tomorrow..."></textarea>
     </section>
 
     <button id="save-entry">💾 Save Entry</button>
   </main>
 
   <script>
-    // Set date
     const params = new URLSearchParams(window.location.search);
     const date = params.get("date");
-    document.getElementById("entry-date").textContent = date ? `Journal for ${date}` : "Journal Entry";
+    document.getElementById("entry-date").textContent = date ? `Journal for ${date}` : "No date selected";
 
-    // Add new trade row
+    const tradeBody = document.getElementById("trade-body");
+    const summaryRow = document.getElementById("summary-row");
+
+    // Add Trade Row
     document.getElementById("add-trade").addEventListener("click", () => {
-      const tbody = document.querySelector("#trade-table tbody");
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td><input type="text" placeholder="e.g. EUR/USD" /></td>
-        <td><input type="text" placeholder="Entry price" /></td>
-        <td><input type="text" placeholder="Exit price" /></td>
-        <td><input type="text" placeholder="e.g. 1:2" /></td>
-        <td><textarea placeholder="Setup notes..."></textarea></td>
-        <td><input type="text" placeholder="+50 / -20" /></td>
-        <td>
-          <input type="file" accept="image/*" class="screenshot-input" />
-          <img class="screenshot-preview" />
-        </td>
+        <td><input placeholder="Pair"></td>
+        <td><input placeholder="Entry"></td>
+        <td><input placeholder="Exit"></td>
+        <td><input placeholder="R:R"></td>
+        <td><textarea placeholder="Notes..."></textarea></td>
+        <td><input placeholder="+50 / -20"></td>
+        <td><input type="file" accept="image/*"></td>
       `;
-      tbody.appendChild(row);
+      tradeBody.appendChild(row);
+      updateSummary();
     });
 
-    // Screenshot preview
-    document.addEventListener("change", (e) => {
-      if (e.target.classList.contains("screenshot-input")) {
-        const file = e.target.files[0];
-        const img = e.target.nextElementSibling;
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = () => {
-            img.src = reader.result;
-            img.style.display = "block";
-            img.style.maxHeight = "200px";
-          };
-          reader.readAsDataURL(file);
+    // Auto update summary on input
+    document.addEventListener("input", e => {
+      if (e.target.closest("#trade-body")) updateSummary();
+    });
+
+    function updateSummary() {
+      const rows = [...tradeBody.querySelectorAll("tr")];
+      let totalTrades = rows.length;
+      let totalPnL = 0, rrSum = 0, rrCount = 0, maxWin = -Infinity, maxLoss = Infinity;
+
+      rows.forEach(row => {
+        const pnlVal = parseFloat(row.cells[5]?.querySelector("input")?.value) || 0;
+        totalPnL += pnlVal;
+        if (pnlVal > maxWin) maxWin = pnlVal;
+        if (pnlVal < maxLoss) maxLoss = pnlVal;
+
+        const rrText = row.cells[3]?.querySelector("input")?.value?.split(":");
+        if (rrText && rrText.length === 2) {
+          const ratio = parseFloat(rrText[1]) / parseFloat(rrText[0]);
+          if (!isNaN(ratio)) { rrSum += ratio; rrCount++; }
         }
-      }
+      });
+
+      summaryRow.children[0].textContent = totalTrades;
+      summaryRow.children[1].textContent = totalPnL.toFixed(2);
+      summaryRow.children[2].textContent = rrCount ? (rrSum / rrCount).toFixed(2) : "0";
+      summaryRow.children[3].textContent = maxWin === -Infinity ? "0" : maxWin;
+      summaryRow.children[4].textContent = maxLoss === Infinity ? "0" : maxLoss;
+    }
+
+    // Theme Toggle
+    const themeToggle = document.getElementById("theme-toggle");
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") document.body.classList.add("light");
+
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("light");
+      localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
     });
 
-    // Save to local storage
+    // Save Entry
     document.getElementById("save-entry").addEventListener("click", () => {
       const data = {
-        trades: Array.from(document.querySelectorAll("#trade-table tbody tr")).map(tr => ({
-          pair: tr.cells[0].querySelector("input").value,
-          entry: tr.cells[1].querySelector("input").value,
-          exit: tr.cells[2].querySelector("input").value,
-          rr: tr.cells[3].querySelector("input").value,
-          notes: tr.cells[4].querySelector("textarea").value,
-          pnl: tr.cells[5].querySelector("input").value,
+        trades: [...tradeBody.querySelectorAll("tr")].map(row => ({
+          pair: row.cells[0].querySelector("input")?.value,
+          entry: row.cells[1].querySelector("input")?.value,
+          exit: row.cells[2].querySelector("input")?.value,
+          rr: row.cells[3].querySelector("input")?.value,
+          notes: row.cells[4].querySelector("textarea")?.value,
+          pnl: row.cells[5].querySelector("input")?.value
         })),
-        summary: document.querySelector("#daily-summary textarea").value,
-        emotions: document.querySelector("#emotions textarea").value,
-        market: document.querySelector("#market-conditions textarea").value,
-        mistakes: document.querySelector("#mistakes textarea").value,
-        plan: document.querySelector("#tomorrows-plan textarea").value,
-        mindset: document.querySelector("#mindset textarea").value,
+        mood: document.querySelector('input[name="mood"]:checked')?.value || "",
+        reflection: document.getElementById("reflection").value,
+        gratitude: document.getElementById("gratitude").value,
+        goals: document.getElementById("goals").value
       };
-      localStorage.setItem(`entry-${date}`, JSON.stringify(data));
+      localStorage.setItem(`journal-${date}`, JSON.stringify(data));
       alert("✅ Entry saved successfully!");
     });
   </script>
